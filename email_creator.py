@@ -45,7 +45,7 @@ config = pd.read_excel(arq,1)
 pesquisa = config.loc[0][0]
 # nan_value = config.loc[0][1]
 
-base['Envio email'] = 0
+base['Envio email'] = "nan"
 for i in range(nlinhas):
     
     
@@ -60,8 +60,10 @@ for i in range(nlinhas):
     email = base.loc[i][19]
     
     if str(email) == "nan":
-        base[i][20].insert(self, loc, column, value) = "Falta email"
+        base.iat[i,20] = "Falta email"
         continue
+    else:
+        base.iat[i,20] = "Em preparação"
     
     # filtrando os reponsaveis pelos chamados
     if not resp:
@@ -94,8 +96,8 @@ for i in range(nlinhas):
     <p>Equipe Customer.</p>
     <p>&nbsp;</p>""".format(saudacao_email,numero_chamado,pesquisa)
 
-# base.to_excel("Final.xlsx")
-base.save()
+base.to_excel("Final.xlsx",index=False)
+# base.save("Final2.xlsx")
 # --- Criando os EMAILS -------------------------------------
 
 
