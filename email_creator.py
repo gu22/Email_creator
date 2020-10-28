@@ -26,7 +26,9 @@ import win32com.client
 
 # -------------------------------------------------------------------
 #----------------------------------------------------------------------
-
+c = 0
+Data = datetime.datetime.now()
+linkp = "https://forms.office.com/Pages/DesignPage.aspx#FormId=e7Oy_KBda0abgwAUtnp8eBa1jXSyJMNKlWZqCEOcTjFURTlSQjNKMjBXM0dCTEdMUEg1NE45NVIzTi4u&Preview=%7B%22PreviousTopView%22%3A%22None%22%7D&TopView=Preview"
 
 # -- Base ----------------------------------------------------------
 data = datetime.datetime.now()
@@ -41,9 +43,11 @@ nlinhas = len(base.index)
 
 resp = []
 
-config = pd.read_excel(arq,1)
-pesquisa = config.loc[0][0]
+# config = pd.read_excel(arq,1)
+# pesquisa = config.loc[0][0]
 # nan_value = config.loc[0][1]
+
+envio = []
 
 base['Envio email'] = "nan"
 for i in range(nlinhas):
@@ -57,9 +61,9 @@ for i in range(nlinhas):
     
     responsavel = base.loc[i][15]
     
-    email = base.loc[i][19]
+    email_destino = base.loc[i][19]
     
-    if str(email) == "nan":
+    if str(email_destino) == "nan":
         base.iat[i,20] = "Falta email"
         continue
     else:
@@ -72,6 +76,7 @@ for i in range(nlinhas):
         resp.append(responsavel)
         
        
+    envio.append("<br>{}: {} {}<\br>".format(c,numero_chamado,email_destino))
 #-------------------------------------------------------------------
 #----------------------------------------------------------------------
 
@@ -87,16 +92,24 @@ for i in range(nlinhas):
     
     
     
-    text = """<p>{}!</p>
-    <p>Estamos enviando este e-mail para avaliar como foi o tratamento do chamado encerrado.</p>
-    <p>&nbsp;Chamado: <span style="background-color: #ffff00; font-size: 28px;">{}</span> --&gt; utilizar esse numero no primeiro item da pesquisa</p>
-    <p>&Eacute; de extrema importancia que voce complete a pesquisa, para melhorar o processo.</p>
-    <b><a title="Pesquisa" href="{}">Pesquisa</a><\b>
-    <p>Atenciosamente,</p>
-    <p>Equipe Customer.</p>
-    <p>&nbsp;</p>""".format(saudacao_email,numero_chamado,pesquisa)
+    text = """<p style="margin: 0cm; margin-bottom: .0001pt;">Prezado {}, tudo bem?</p>
+    <p style="margin: 0cm; margin-bottom: .0001pt;">&nbsp;</p>
+    <p style="margin: 0cm; margin-bottom: .0001pt;">Meu contato &eacute; referente uma pesquisa de satisfa&ccedil;&atilde;o relacionada ao chamado <span style="background-color: #ffcc00;">{}</span> que foi finalizado, ela serve para nos ajudar na melhoria dos nossos atendimentos, leva menos que 05 minutos, pode nos ajudar?</p>
+    <p style="margin: 0cm; margin-bottom: .0001pt;">&nbsp;</p>
+    <p style="margin: 0cm; margin-bottom: .0001pt;">Link: <a href="{}">{}</a></p>
+    <p>Atenciosamente / Best regards,</p>
+    <p>&nbsp;<br /><span style="font-size: 20px;"><strong><span style="color: #de0043;"><em>Pesquisa - Teste</em></span></strong></span> <br /><span style="color: #10384f;"><strong>Distribution CP </strong></span></p>
+    <p><br /><span style="color: #3adeff; letter-spacing: -1px; font-size: 16px;"><strong>////////////////////</strong></span></p>
+    <p><br />Bayer Brazil &ndash; Crop Science</p>
+    <p>Rua Domingos Jorge, 1100 |</p>
+    <p>Web: http://www.bayer.com</p>
+    
+    
+    
+    """.format(saudacao_email,numero_chamado,linkp,linkp)
+    # """.format(saudacao_email,numero_chamado,pesquisa)
 
-base.to_excel("Final.xlsx",index=False)
+
 # base.save("Final2.xlsx")
 # --- Criando os EMAILS -------------------------------------
 
@@ -129,39 +142,85 @@ base.to_excel("Final.xlsx",index=False)
 # trasp_email = trasp_email[-1]
 # print(trasp_email)
 
-# outlook = win32com.client.Dispatch('Outlook.Application')
-# email = outlook.CreateItem(0)
-# # email = outlook.CreateItemFromTemplate(os.getcwd() + '\\cte.msg')
-# email.To= ''
-# email.BodyFormat= 2
-# email.Subject="Avalição dos Fornecedores - Base de Dados (%s) - %s"%(trasp_email,mes)
-# # email.Subject= email.Subject.replace('[compName]','test')
-# email.HTMLBody= (
-# """{} 
-#     esperamos que todos estejam bem!<p>
-    
-#     Nossa reunião de avaliação está próxima!<br>
-#     Estamos disponibilizando a base de dados referente ao mês de <b> {}  </b> para que vocês possam
-#     analisar e nos informar o que ocorreu.<p> 
-#     Para qualquer tipo de dúvida, estamos à disposição!<br>"""%(saudacao_email,mes)
+    assunto = "Pesquisa - teste 1"
     
     
-#     )
+    outlook = win32com.client.Dispatch('Outlook.Application')
+    email = outlook.CreateItem(0)
+    # email = outlook.CreateItemFromTemplate(os.getcwd() + '\\cte.msg')
+    email.To= email_destino
+    email.BodyFormat= 2
+    email.Subject= assunto
+    # email.Subject= email.Subject.replace('[compName]','test')
+    email.HTMLBody= (text)
 
-# #email - anexos
-# # email.HTMLBody= email.HTMLBody.replace('fname', 'test')
+
+
+#email - anexos
+# email.HTMLBody= email.HTMLBody.replace('fname', 'test')
 # for x in email_path:
 #     email.Attachments.Add(Source= os.path.join(item,x))
-
+# signature = easygui.fileopenbox()
+# sign = win32com.client.Dispatch('Word.Application')
+# doc = app.Documents.Open(r'D:\winGUI\test\1.doc')
+# doc = sign.Documents.Open(signature)
+# doc.Content.Copy()
+# doc.Close()
    
+# email.GetInspector.WordEditor.Range(Start=0, End=0).Paste()
+
+#email - exibição
+    # email.Display(False)
 
 
-# #email - exibição
-#     email.Display(False)
+    email.SaveAs("Teste_pesquisa - {}.msg".format(c),3)
+    base.iat[i,20] = "OK"
+    c+=1
+    email.Send()
+     
+
+nenvios = len(envio)    
+insert = ("").join(envio)
+
+data_rg = (str(Data.strftime("%Y.%m.%d_%H.%M.%S")))
+
+texto_verificacao = ("""
+
+<p>=================== Verifica&ccedil;&atilde;o de Envios ================</p>
+{}
+<p>{}, Total de envios: {}</p>
+
+""").format(insert,data_rg,nenvios)
+
+assunto_verificacao = "Teste - relatorio_email"
+
+emailv = outlook.CreateItem(0)
+# email = outlook.CreateItemFromTemplate(os.getcwd() + '\\cte.msg')
+emailv.To= 'gustavo.dossantos@bayer.com;beatriz.goncalves@bayer.com'
+emailv.BodyFormat= 2
+emailv.Subject= assunto_verificacao
+# email.Subject= email.Subject.replace('[compName]','test')
+emailv.HTMLBody= (texto_verificacao)   
 
 
-# email.SaveAs(item+ '\\EMAIL- %s_%s.msg'%(trasp_email,mes), 3)
+emailv.SaveAs("{}.msg".format(assunto_verificacao),3)
+emailv.Send()   
 
-            
+base.to_excel("Final.xlsx",index=False)
 # -----------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------
+
+"""<p>{}!</p>
+    <p>Estamos enviando este e-mail para avaliar como foi o tratamento do chamado encerrado.</p>
+    <p>&nbsp;Chamado: <span style="background-color: #ffff00; font-size: 28px;">{}</span> --&gt; utilizar esse numero no primeiro item da pesquisa</p>
+    <p>&Eacute; de extrema importancia que voce complete a pesquisa, para melhorar o processo.</p>
+    <b><a title="Pesquisa" href="{}">Pesquisa</a><\b>
+    <p>Atenciosamente,</p>
+    <p>Equipe Customer.</p>
+    <p>&nbsp;</p>
+    <p>Atenciosamente / Best regards,</p>
+    <p>&nbsp;<br /><span style="font-size: 20px;"><strong><span style="color: #de0043;"><em>Pesquisa - Teste</em></span></strong></span> <br /><span style="color: #10384f;"><strong>Distribution CP </strong></span></p>
+    <p><br /><span style="color: #3adeff; letter-spacing: -1px; font-size: 16px;"><strong>////////////////////</strong></span></p>
+    <p><br />Bayer Brazil &ndash; Crop Science</p>
+    <p>Rua Domingos Jorge, 1100 |</p>
+    <p>Web: http://www.bayer.com</p>"""

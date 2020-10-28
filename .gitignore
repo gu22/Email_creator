@@ -125,3 +125,5 @@ dmypy.json
 .pyre/
 *.xlsx
 *.xlsx
+*.xlsx
+Final.xlsx
