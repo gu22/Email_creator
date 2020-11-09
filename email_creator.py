@@ -7,7 +7,7 @@ Created on Mon Oct 26 09:58:24 2020
 # --- MODULOS E IMPORTS ---------------------------------
 
 import datetime
-import os.path
+#import os.path
 
 import easygui
 from easygui import *
@@ -16,8 +16,8 @@ import openpyxl
 from openpyxl import load_workbook
 import pandas as pd
 
-import shutil
-from shutil import copyfile
+# import shutil
+# from shutil import copyfile
 
 from datetime import date
 import sys
@@ -31,10 +31,10 @@ Data = datetime.datetime.now()
 
 print(Data)
 print ("Automação para enviar emails (Pesquisa de Satisfação)")
-print("v 1.00\n")
+print("v 1.02\n")
 
 
-linkd = "https://forms.office.com/Pages/DesignPage.aspx#FormId=e7Oy_KBda0abgwAUtnp8eBa1jXSyJMNKlWZqCEOcTjFURTlSQjNKMjBXM0dCTEdMUEg1NE45NVIzTi4u&Preview=%7B%22PreviousTopView%22%3A%22None%22%7D&TopView=Preview"
+linkd = "https://forms.office.com/Pages/ResponsePage.aspx?id=e7Oy_KBda0abgwAUtnp8eBa1jXSyJMNKlWZqCEOcTjFURTlSQjNKMjBXM0dCTEdMUEg1NE45NVIzTi4u"
 linkp = easygui.enterbox(msg='Entre com o link do Forms', title='Link Forms ', default=linkd, strip=True)
 email_confirmacao = easygui.enterbox(msg='Entre com os e-mails para recebe a confirmação\n Separar os e-mails com ; (ponto e virgula)', title='E-mail para controle ', default='', strip=True)
 assunto = easygui.enterbox(msg='Qual assunto/titulo do e-mail ?', title='Assunto - E-mail ', default='Pesquisa de Satisfação', strip=True)
@@ -78,7 +78,13 @@ for i in range(nlinhas):
     
     # Pegando valores da base dados
     campo_chamado = base.columns[0]
-    numero_chamado = base.loc[i][0]
+    try:
+        numero_chamado = int(base.loc[i][0])
+    except:
+        base.iat[i,ncolunas] = "Falta n° chamado"
+        continue
+    
+    nome_chamado = base.loc[i][20]
 
     cliente = base.loc[i][13]
     
@@ -86,12 +92,17 @@ for i in range(nlinhas):
     
     email_destino = base.loc[i][19]
     
+    if str(nome_chamado) == 'nan':
+        base.iat[i,ncolunas] = "Falta Assunto do chamado"
+        recusa.append(" {};".format(numero_chamado))
+        continue
+    
     if str(email_destino) == "nan":
-        base.iat[i,20] = "Falta email"
+        base.iat[i,ncolunas] = "Falta email"
         recusa.append(" {};".format(numero_chamado))
         continue
     else:
-        base.iat[i,20] = "Em preparação"
+        base.iat[i,ncolunas] = "Em preparação"
     
     # filtrando os reponsaveis pelos chamados
     if not resp:
@@ -117,19 +128,27 @@ for i in range(nlinhas):
     
     
     
-    text = """<p style="margin: 0cm; margin-bottom: .0001pt;">Prezado {}, tudo bem?</p>
-    <p style="margin: 0cm; margin-bottom: .0001pt;">&nbsp;</p>
-    <p style="margin: 0cm; margin-bottom: .0001pt;">Meu contato &eacute; referente uma pesquisa de satisfa&ccedil;&atilde;o relacionada ao chamado <span style="background-color: #ffcc00;">{}</span> que foi finalizado, ela serve para nos ajudar na melhoria dos nossos atendimentos, leva menos que 05 minutos, pode nos ajudar?</p>
-    <p style="margin: 0cm; margin-bottom: .0001pt;">&nbsp;</p>
-    <p style="margin: 0cm; margin-bottom: .0001pt;">Link: <a href="{}">{}</a></p>
-    <p>Atenciosamente / Best regards,</p>
-    <p>&nbsp;<br /><span style="font-size: 20px;ont-family:Arial;"><strong><span style="color: #de0043;"><em>Pesquisa - Teste</em></span></strong></span> <br /><span style="color: #10384f;"><strong>Distribution CP </strong></span></p>
-    <p><span style="color: #3adeff; letter-spacing: -1px; font-size: 16px;"><strong>////////////////////</strong></span></p>
-    <p>Bayer Brazil &ndash; Crop Science <br />Rua Domingos Jorge, 1100 | <br />Web: <a href="http://www.bayer.com">http://www.bayer.com<\a></p>
+    text = """<p style="margin: 0cm; margin-bottom: .0001pt;">Prezado, {}!</p>
+<p style="margin: 0cm; margin-bottom: .0001pt;">&nbsp;</p>
+<p style="margin: 0cm; margin-bottom: .0001pt;">Tudo bem?</p>
+<p style="margin: 0cm; margin-bottom: .0001pt;">&nbsp;</p>
+<p style="margin: 0cm; margin-bottom: .0001pt;">Recentemente voc&ecirc; entrou em contato com a Central de Intera&ccedil;&atilde;o referente ao chamado <strong>{} - {}</strong>.</p>
+<p style="margin: 0cm; margin-bottom: .0001pt;">&nbsp;</p>
+<p style="margin: 0cm; margin-bottom: .0001pt;">Poderia, por gentileza, nos ajudar na melhoria dos nossos atendimentos respondendo essa pesquisa que leva menos de 2min?</p>
+<p style="margin: 0cm; margin-bottom: .0001pt;">&nbsp;</p>
+<p style="margin: 0cm; margin-bottom: .0001pt;">Link: <a href="{}">{}</a></p>
+<p style="margin: 0cm; margin-bottom: .0001pt;">&nbsp;</p>
+<p style="margin: 0cm; margin-bottom: .0001pt;">Agradecemos a colabora&ccedil;&atilde;o!</p>
+<p>Atenciosamente / Best regards,</p>
+<p>&nbsp;<br /><span style="font-size: 20px; ont-family: Arial;"><strong><span style="color: #de0043;"><em>Central de Intera&ccedil;&atilde;o</em></span></strong></span>&nbsp;<br /><span style="color: #10384f;"><strong>Customer Interaction</strong></span></p>
+<p><span style="color: #3adeff; letter-spacing: -1px; font-size: 16px;"><strong>////////////////////</strong></span></p>
+<p>Bayer Brazil &ndash; Crop Science</p>
+<p>Contatos:<br />Tel: 0800 940 6000 (Op&ccedil;&atilde;o 1)<br />E-mail: <a href="mailto:cal.monsanto.brasil@monsanto.com">cal.monsanto.brasil@monsanto.com</a>&nbsp;<br />Web: <a href="http://www.bayer.com">http://www.bayer.com&lt;\a&gt;</a></p>
+<p>&nbsp;</p>
     
     
     
-    """.format(saudacao_email,numero_chamado,linkp,linkp)
+    """.format(saudacao_email,numero_chamado,nome_chamado,linkp,linkp)
     # """.format(saudacao_email,numero_chamado,pesquisa)
 
 
@@ -196,8 +215,8 @@ for i in range(nlinhas):
     # email.Display(False)
 
 
-    email.SaveAs("{} - {} - {}.msg".format(assunto,c,numero_chamado),3)
-    base.iat[i,20] = "OK"
+    # email.SaveAs("{} - {} - {}.msg".format(assunto,c,numero_chamado),3)
+    base.iat[i,ncolunas] = "OK"
     c+=1
     email.Send()
      
@@ -226,7 +245,7 @@ emailv.Subject= assunto_verificacao
 emailv.HTMLBody= (texto_verificacao)   
 
 
-emailv.SaveAs("{} - {}.msg".format(assunto_verificacao,data_rg),3)
+# emailv.SaveAs("{} - {}.msg".format(assunto_verificacao,data_rg),3)
 emailv.Send()   
 
 base.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
