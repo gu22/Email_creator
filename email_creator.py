@@ -28,12 +28,27 @@ import win32com.client
 #----------------------------------------------------------------------
 c = 0
 Data = datetime.datetime.now()
-linkp = "https://forms.office.com/Pages/DesignPage.aspx#FormId=e7Oy_KBda0abgwAUtnp8eBa1jXSyJMNKlWZqCEOcTjFURTlSQjNKMjBXM0dCTEdMUEg1NE45NVIzTi4u&Preview=%7B%22PreviousTopView%22%3A%22None%22%7D&TopView=Preview"
 
+print(Data)
+print ("Automação para enviar emails (Pesquisa de Satisfação)")
+print("v 1.00\n")
+
+
+linkd = "https://forms.office.com/Pages/DesignPage.aspx#FormId=e7Oy_KBda0abgwAUtnp8eBa1jXSyJMNKlWZqCEOcTjFURTlSQjNKMjBXM0dCTEdMUEg1NE45NVIzTi4u&Preview=%7B%22PreviousTopView%22%3A%22None%22%7D&TopView=Preview"
+linkp = easygui.enterbox(msg='Entre com o link do Forms', title='Link Forms ', default=linkd, strip=True)
+email_confirmacao = easygui.enterbox(msg='Entre com os e-mails para recebe a confirmação\n Separar os e-mails com ; (ponto e virgula)', title='E-mail para controle ', default='', strip=True)
+assunto = easygui.enterbox(msg='Qual assunto/titulo do e-mail ?', title='Assunto - E-mail ', default='Pesquisa de Satisfação', strip=True)
+easygui.enterbox
 # -- Base ----------------------------------------------------------
+
+
+
+
+
+
 data = datetime.datetime.now()
 
-arq = easygui.fileopenbox()
+arq = easygui.fileopenbox("Selecionar arquivo",title="Arquivo Excel com RTV\e-mails",filetypes=["*.xlsx"],multiple=False)
 
 base = pd.read_excel(arq)
  
@@ -48,8 +63,16 @@ resp = []
 # nan_value = config.loc[0][1]
 
 envio = []
+recusa = []
 
 base['Envio email'] = "nan"
+
+
+if ccbox("Iniciar Processamento?", "Inicar processo para enviar e-mails"):
+    pass
+else:
+    sys.exit(0)
+
 for i in range(nlinhas):
     
     
@@ -65,6 +88,7 @@ for i in range(nlinhas):
     
     if str(email_destino) == "nan":
         base.iat[i,20] = "Falta email"
+        recusa.append(" {};".format(numero_chamado))
         continue
     else:
         base.iat[i,20] = "Em preparação"
@@ -75,7 +99,8 @@ for i in range(nlinhas):
     elif responsavel not in resp:
         resp.append(responsavel)
         
-       
+    print ("{}: {} {}\n".format(c,numero_chamado,email_destino)) 
+    print ("==============================================\n")
     envio.append("<br>{}: {} {}<\br>".format(c,numero_chamado,email_destino))
 #-------------------------------------------------------------------
 #----------------------------------------------------------------------
@@ -98,11 +123,9 @@ for i in range(nlinhas):
     <p style="margin: 0cm; margin-bottom: .0001pt;">&nbsp;</p>
     <p style="margin: 0cm; margin-bottom: .0001pt;">Link: <a href="{}">{}</a></p>
     <p>Atenciosamente / Best regards,</p>
-    <p>&nbsp;<br /><span style="font-size: 20px;"><strong><span style="color: #de0043;"><em>Pesquisa - Teste</em></span></strong></span> <br /><span style="color: #10384f;"><strong>Distribution CP </strong></span></p>
-    <p><br /><span style="color: #3adeff; letter-spacing: -1px; font-size: 16px;"><strong>////////////////////</strong></span></p>
-    <p><br />Bayer Brazil &ndash; Crop Science</p>
-    <p>Rua Domingos Jorge, 1100 |</p>
-    <p>Web: http://www.bayer.com</p>
+    <p>&nbsp;<br /><span style="font-size: 20px;ont-family:Arial;"><strong><span style="color: #de0043;"><em>Pesquisa - Teste</em></span></strong></span> <br /><span style="color: #10384f;"><strong>Distribution CP </strong></span></p>
+    <p><span style="color: #3adeff; letter-spacing: -1px; font-size: 16px;"><strong>////////////////////</strong></span></p>
+    <p>Bayer Brazil &ndash; Crop Science <br />Rua Domingos Jorge, 1100 | <br />Web: <a href="http://www.bayer.com">http://www.bayer.com<\a></p>
     
     
     
@@ -142,7 +165,7 @@ for i in range(nlinhas):
 # trasp_email = trasp_email[-1]
 # print(trasp_email)
 
-    assunto = "Pesquisa - teste 1"
+    # assunto = "Pesquisa - teste 1"
     
     
     outlook = win32com.client.Dispatch('Outlook.Application')
@@ -173,7 +196,7 @@ for i in range(nlinhas):
     # email.Display(False)
 
 
-    email.SaveAs("Teste_pesquisa - {}.msg".format(c),3)
+    email.SaveAs("{} - {} - {}.msg".format(assunto,c,numero_chamado),3)
     base.iat[i,20] = "OK"
     c+=1
     email.Send()
@@ -181,32 +204,34 @@ for i in range(nlinhas):
 
 nenvios = len(envio)    
 insert = ("").join(envio)
-
+insert_recusa = ("").join(recusa)
 data_rg = (str(Data.strftime("%Y.%m.%d_%H.%M.%S")))
 
 texto_verificacao = ("""
 
-<p>=================== Verifica&ccedil;&atilde;o de Envios ================</p>
-{}
-<p>{}, Total de envios: {}</p>
+<p>=================== Verifica&ccedil;&atilde;o dos Envios ================</p>
+{}<p>Chamados não enviados: {}<\p>
+<p>{}, Total de itens enviados: {}</p>
 
-""").format(insert,data_rg,nenvios)
+""").format(insert,insert_recusa,data_rg,nenvios)
 
-assunto_verificacao = "Teste - relatorio_email"
+assunto_verificacao = "Relatorio_email"
 
 emailv = outlook.CreateItem(0)
 # email = outlook.CreateItemFromTemplate(os.getcwd() + '\\cte.msg')
-emailv.To= 'gustavo.dossantos@bayer.com;beatriz.goncalves@bayer.com'
+emailv.To= email_confirmacao
 emailv.BodyFormat= 2
 emailv.Subject= assunto_verificacao
 # email.Subject= email.Subject.replace('[compName]','test')
 emailv.HTMLBody= (texto_verificacao)   
 
 
-emailv.SaveAs("{}.msg".format(assunto_verificacao),3)
+emailv.SaveAs("{} - {}.msg".format(assunto_verificacao,data_rg),3)
 emailv.Send()   
 
-base.to_excel("Final.xlsx",index=False)
+base.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
+
+easygui.msgbox("Finalizado")
 # -----------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------
 
