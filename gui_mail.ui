@@ -1,0 +1,428 @@
+<?xml version='1.0' encoding='utf-8'?>
+<interface version="1.0">
+  <object class="ttk.Frame" id="base_ds">
+    <property name="height">400</property>
+    <property name="onvalue">1</property>
+    <property name="relief">flat</property>
+    <property name="width">600</property>
+    <layout manager="pack">
+      <property name="anchor">center</property>
+      <property name="expand">false</property>
+      <property name="propagate">False</property>
+      <property name="side">top</property>
+    </layout>
+    <child>
+      <object class="tk.Text" id="forms_link">
+        <property name="autoseparators">false</property>
+        <property name="height">1</property>
+        <property name="state">normal</property>
+        <property name="takefocus">true</property>
+        <property name="undo">true</property>
+        <property name="width">200</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="relheight">0.05</property>
+          <property name="relwidth">0.66</property>
+          <property name="relx">0.01</property>
+          <property name="rely">0.05</property>
+          <property name="x">0</property>
+          <property name="y">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="tk.Text" id="mail_control">
+        <property name="height">10</property>
+        <property name="takefocus">true</property>
+        <property name="undo">true</property>
+        <property name="width">200</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="bordermode">inside</property>
+          <property name="relheight">0.05</property>
+          <property name="relwidth">0.71</property>
+          <property name="relx">0.01</property>
+          <property name="rely">0.21</property>
+          <property name="x">0</property>
+          <property name="y">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Label" id="label_forms">
+        <property name="text" translatable="yes">Link Forms</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="relx">0.01</property>
+          <property name="x">0</property>
+          <property name="y">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Label" id="label_mail">
+        <property name="text" translatable="yes">E-mails para relatórios</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="relx">0.01</property>
+          <property name="rely">0.16</property>
+          <property name="x">0</property>
+          <property name="y">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Checkbutton" id="ok_mail">
+        <property name="cursor">arrow</property>
+        <property name="offvalue">0</property>
+        <property name="state">normal</property>
+        <property name="text" translatable="yes">E-mails confirmados</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="relx">0.74</property>
+          <property name="rely">0.22</property>
+          <property name="x">0</property>
+          <property name="y">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Checkbutton" id="ok_forms">
+        <property name="offvalue">0</property>
+        <property name="text" translatable="yes">Link confirmado</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="relx">0.69</property>
+          <property name="rely">0.05</property>
+          <property name="x">0</property>
+          <property name="y">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Separator" id="separator_2">
+        <property name="orient">horizontal</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="relx">0.0</property>
+          <property name="rely">0.47</property>
+          <property name="width">600</property>
+          <property name="y">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Notebook" id="notebook_1">
+        <property name="height">200</property>
+        <property name="width">350</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="relx">0.01</property>
+          <property name="rely">0.48</property>
+          <property name="x">0</property>
+          <property name="y">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="pygubu.builder.widgets.pathchooserinput" id="arquivo_ch">
+        <property name="textvariable">string:arquivoexc</property>
+        <property name="type">file</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="relx">0.01</property>
+          <property name="rely">0.38</property>
+          <property name="width">465</property>
+          <property name="x">0</property>
+          <property name="y">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Label" id="label_arquivo">
+        <property name="text" translatable="yes">Excel com chamados</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="relx">0.01</property>
+          <property name="rely">0.33</property>
+          <property name="x">0</property>
+          <property name="y">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Progressbar" id="progressbar_1">
+        <property name="maximum">100</property>
+        <property name="orient">vertical</property>
+        <property name="value">0</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="height">190</property>
+          <property name="relx">0.61</property>
+          <property name="rely">0.51</property>
+          <property name="width">15</property>
+          <property name="x">0</property>
+          <property name="y">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Button" id="button_ok">
+        <property name="text" translatable="yes">OK</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="relx">0.86</property>
+          <property name="rely">0.92</property>
+          <property name="x">0</property>
+          <property name="y">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Button" id="button_enviar">
+        <property name="text" translatable="yes">Enviar</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="height">80</property>
+          <property name="relx">0.75</property>
+          <property name="rely">0.56</property>
+          <property name="width">80</property>
+          <property name="y">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Progressbar" id="progressbar_2">
+        <property name="maximum">100</property>
+        <property name="orient">horizontal</property>
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="height">6</property>
+          <property name="relx">0.75</property>
+          <property name="rely">0.77</property>
+          <property name="width">80</property>
+          <property name="x">0</property>
+          <property name="y">0</property>
+        </layout>
+      </object>
+    </child>
+    <child>
+      <object class="ttk.Button" id="button_config">
+        <property name="text" translatable="yes">Configurações</property>
+        <bind add="" handler="callback" sequence="&lt;1&gt;" />
+        <layout manager="place">
+          <property name="anchor">nw</property>
+          <property name="relx">0.66</property>
+          <property name="rely">0.92</property>
+          <property name="x">0</property>
+          <property name="y">0</property>
+        </layout>
+      </object>
+    </child>
+  </object>
+  <object class="pygubu.builder.widgets.dialog" id="dialog_3">
+    <property name="height">100</property>
+    <property name="modal">false</property>
+    <property name="width">200</property>
+    <child>
+      <object class="ttk.Frame" id="frame_5">
+        <property name="height">400</property>
+        <property name="text" translatable="yes">E-mail</property>
+        <property name="width">500</property>
+        <layout manager="pack">
+          <property name="propagate">True</property>
+          <property name="side">top</property>
+        </layout>
+        <child>
+          <object class="ttk.Label" id="label_6">
+            <property name="anchor">center</property>
+            <property name="font">{Arial} 20 {bold}</property>
+            <property name="text" translatable="yes">Configurações</property>
+            <layout manager="place">
+              <property name="anchor">nw</property>
+              <property name="relx">0.29</property>
+              <property name="rely">0.04</property>
+              <property name="x">0</property>
+              <property name="y">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Notebook" id="notebook_2">
+            <property name="height">280</property>
+            <property name="width">490</property>
+            <bind add="" handler="callback" sequence="" />
+            <layout manager="place">
+              <property name="anchor">center</property>
+              <property name="relx">0.50</property>
+              <property name="rely">0.52</property>
+              <property name="x">0</property>
+              <property name="y">0</property>
+            </layout>
+            <child>
+              <object class="ttk.Notebook.Tab" id="tab_1">
+                <property name="text" translatable="yes">Planilha</property>
+                <child>
+                  <object class="ttk.Frame" id="frame_6">
+                    <property name="height">150</property>
+                    <property name="width">150</property>
+                    <layout manager="place">
+                      <property name="anchor">nw</property>
+                      <property name="relx">0.0</property>
+                      <property name="x">0</property>
+                      <property name="y">0</property>
+                    </layout>
+                    <child>
+                      <object class="ttk.Entry" id="entry_4">
+                        <property name="justify">center</property>
+                        <property name="text" translatable="yes">
+</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="relx">0.23</property>
+                          <property name="rely">0.05</property>
+                          <property name="width">30</property>
+                          <property name="x">0</property>
+                          <property name="y">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Entry" id="entry_5">
+                        <property name="justify">center</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="relx">0.55</property>
+                          <property name="rely">0.05</property>
+                          <property name="width">30</property>
+                          <property name="x">0</property>
+                          <property name="y">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Entry" id="entry_6">
+                        <property name="justify">center</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="relx">0.89</property>
+                          <property name="rely">0.05</property>
+                          <property name="width">30</property>
+                          <property name="x">0</property>
+                          <property name="y">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="label_7">
+                        <property name="text" translatable="yes">Coluna Chamado</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="relx">0.01</property>
+                          <property name="rely">0.05</property>
+                          <property name="x">0</property>
+                          <property name="y">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="label_8">
+                        <property name="text" translatable="yes">Coluna E-mail</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="relx">0.7</property>
+                          <property name="rely">0.05</property>
+                          <property name="x">0</property>
+                          <property name="y">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="label_9">
+                        <property name="text" translatable="yes">Coluna Assunto</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="relx">0.35</property>
+                          <property name="rely">0.05</property>
+                          <property name="x">0</property>
+                          <property name="y">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Treeview" id="treeview_1">
+                        <property name="selectmode">extended</property>
+                        <property name="show">headings</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="height">200</property>
+                          <property name="relx">0.01</property>
+                          <property name="rely">0.21</property>
+                          <property name="width">480</property>
+                          <property name="x">0</property>
+                          <property name="y">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                  </object>
+                </child>
+              </object>
+            </child>
+            <child>
+              <object class="ttk.Notebook.Tab" id="tab_2">
+                <property name="state">normal</property>
+                <property name="text" translatable="yes">E-mail</property>
+                <child>
+                  <object class="ttk.Frame" id="frame_7">
+                    <property name="height">200</property>
+                    <property name="width">200</property>
+                    <layout manager="pack">
+                      <property name="propagate">True</property>
+                      <property name="side">top</property>
+                    </layout>
+                  </object>
+                </child>
+              </object>
+            </child>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="button_4">
+            <property name="text" translatable="yes">OK</property>
+            <layout manager="place">
+              <property name="anchor">nw</property>
+              <property name="relx">0.81</property>
+              <property name="rely">0.93</property>
+              <property name="x">0</property>
+              <property name="y">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="button_5">
+            <property name="text" translatable="yes">Preview</property>
+            <layout manager="place">
+              <property name="anchor">nw</property>
+              <property name="relx">0.02</property>
+              <property name="rely">0.93</property>
+              <property name="x">0</property>
+              <property name="y">0</property>
+            </layout>
+          </object>
+        </child>
+        <child>
+          <object class="ttk.Button" id="button_6">
+            <property name="text" translatable="yes">Save</property>
+            <layout manager="place">
+              <property name="anchor">nw</property>
+              <property name="relx">0.64</property>
+              <property name="rely">0.93</property>
+              <property name="x">0</property>
+              <property name="y">0</property>
+            </layout>
+          </object>
+        </child>
+      </object>
+    </child>
+  </object>
+</interface>
