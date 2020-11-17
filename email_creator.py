@@ -31,7 +31,7 @@ Data = datetime.datetime.now()
 
 print(Data)
 print ("Automação para enviar emails (Pesquisa de Satisfação)")
-print("v 1.02\n")
+print("v 1.03\n")
 
 
 linkd = "https://forms.office.com/Pages/ResponsePage.aspx?id=e7Oy_KBda0abgwAUtnp8eBa1jXSyJMNKlWZqCEOcTjFURTlSQjNKMjBXM0dCTEdMUEg1NE45NVIzTi4u"
