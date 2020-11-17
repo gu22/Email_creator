@@ -35,14 +35,29 @@ print("v 1.02\n")
 
 
 linkd = "https://forms.office.com/Pages/ResponsePage.aspx?id=e7Oy_KBda0abgwAUtnp8eBa1jXSyJMNKlWZqCEOcTjFURTlSQjNKMjBXM0dCTEdMUEg1NE45NVIzTi4u"
-linkp = easygui.enterbox(msg='Entre com o link do Forms', title='Link Forms ', default=linkd, strip=True)
-email_confirmacao = easygui.enterbox(msg='Entre com os e-mails para recebe a confirmação\n Separar os e-mails com ; (ponto e virgula)', title='E-mail para controle ', default='', strip=True)
-assunto = easygui.enterbox(msg='Qual assunto/titulo do e-mail ?', title='Assunto - E-mail ', default='Pesquisa de Satisfação', strip=True)
-easygui.enterbox
+# linkp = easygui.enterbox(msg='Entre com o link do Forms', title='Link Forms ', default=linkd, strip=True)
+# email_confirmacao = easygui.enterbox(msg='Entre com os e-mails para recebe a confirmação\n Separar os e-mails com ; (ponto e virgula)', title='E-mail para controle ', default='', strip=True)
+# assunto = easygui.enterbox(msg='Qual assunto/titulo do e-mail ?', title='Assunto - E-mail ', default='Pesquisa de Satisfação', strip=True)
+# easygui.enterbox
+
+campos = ["Link Forms","Assunto","E-mail Origem\Remetente","E-mail Relatorio"]
+default_valores = [linkd,"Pesquisa de Satisfação","",""]
+
+
+
+
+#---------------------------------------------------------------------------
 # -- Base ----------------------------------------------------------
 
 
 
+
+valores = easygui.multenterbox("oi","poe ae",campos,default_valores)
+
+linkp = valores[0]
+assunto = valores[1]
+email_sender = valores[2]
+email_confirmacao = valores[3]
 
 
 
@@ -191,6 +206,10 @@ for i in range(nlinhas):
     email = outlook.CreateItem(0)
     # email = outlook.CreateItemFromTemplate(os.getcwd() + '\\cte.msg')
     email.To= email_destino
+    if email_sender == "":
+        pass
+    else:
+         email.SentOnBehalfOfName= email_sender
     email.BodyFormat= 2
     email.Subject= assunto
     # email.Subject= email.Subject.replace('[compName]','test')
@@ -210,15 +229,16 @@ for i in range(nlinhas):
 # doc.Close()
    
 # email.GetInspector.WordEditor.Range(Start=0, End=0).Paste()
-
+#HINT
 #email - exibição
-    # email.Display(False)
+    email.Display(False)
 
 
     # email.SaveAs("{} - {} - {}.msg".format(assunto,c,numero_chamado),3)
     base.iat[i,ncolunas] = "OK"
     c+=1
-    email.Send()
+    #HINT
+    # email.Send()
      
 
 nenvios = len(envio)    
@@ -246,7 +266,13 @@ emailv.HTMLBody= (texto_verificacao)
 
 
 # emailv.SaveAs("{} - {}.msg".format(assunto_verificacao,data_rg),3)
-emailv.Send()   
+
+
+#HINT
+emailv.Display(False)
+
+if not email_confirmacao == "":
+    emailv.Send()   
 
 base.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
 
