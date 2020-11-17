@@ -40,7 +40,7 @@ linkd = "https://forms.office.com/Pages/ResponsePage.aspx?id=e7Oy_KBda0abgwAUtnp
 # assunto = easygui.enterbox(msg='Qual assunto/titulo do e-mail ?', title='Assunto - E-mail ', default='Pesquisa de Satisfação', strip=True)
 # easygui.enterbox
 
-campos = ["Link Forms","Assunto","E-mail Origem\Remetente","E-mail Relatorio"]
+campos = ["Link Forms*","Assunto*","E-mail Origem\Remetente","E-mail Relatorio"]
 default_valores = [linkd,"Pesquisa de Satisfação","",""]
 
 
@@ -52,7 +52,7 @@ default_valores = [linkd,"Pesquisa de Satisfação","",""]
 
 
 
-valores = easygui.multenterbox("oi","poe ae",campos,default_valores)
+valores = easygui.multenterbox("Entre com os dados\nCampos com * são obrigatórios\nCaso remetente fique em branco será utilizado o E-mail padrão do computador","Informações para E-mails",campos,default_valores)
 
 linkp = valores[0]
 assunto = valores[1]
@@ -231,14 +231,14 @@ for i in range(nlinhas):
 # email.GetInspector.WordEditor.Range(Start=0, End=0).Paste()
 #HINT
 #email - exibição
-    email.Display(False)
+    # email.Display(False)
 
 
     # email.SaveAs("{} - {} - {}.msg".format(assunto,c,numero_chamado),3)
     base.iat[i,ncolunas] = "OK"
     c+=1
     #HINT
-    # email.Send()
+    email.Send()
      
 
 nenvios = len(envio)    
@@ -269,7 +269,7 @@ emailv.HTMLBody= (texto_verificacao)
 
 
 #HINT
-emailv.Display(False)
+# emailv.Display(False)
 
 if not email_confirmacao == "":
     emailv.Send()   
