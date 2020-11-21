@@ -1,21 +1,14 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Thu Nov 19 23:00:41 2020
-
-@author: gusan
-"""
-
 import tkinter as tk
 import tkinter.ttk as ttk
-from pygubu.widgets.dialog import Dialog
+
 from pygubu.widgets.scrollbarhelper import ScrollbarHelper
 
 
-class GuiMail02App:
+class AutomailConfig:
     def __init__(self, master=None):
         # build ui
-        self.dialog_3 = Dialog(master)
-        self.frame_5 = ttk.Frame(self.dialog_3.toplevel)
+        # self.configuracao = Dialog(master)
+        self.frame_5 = ttk.Frame(master)
         self.label_6 = ttk.Label(self.frame_5)
         self.label_6.config(anchor='center', font='{Arial} 20 {bold}', text='Configurações')
         self.label_6.place(anchor='nw', relx='0.29', rely='0.04', x='0', y='0')
@@ -23,10 +16,6 @@ class GuiMail02App:
         self.frame_6 = ttk.Frame(self.notebook_2)
         self.n_chamado = ttk.Entry(self.frame_6)
         self.n_chamado.config(justify='center')
-        _text_ = '''
-'''
-        self.n_chamado.delete('0', 'end')
-        self.n_chamado.insert('0', _text_)
         self.n_chamado.place(anchor='nw', relx='0.23', rely='0.05', width='30', x='0', y='0')
         self.n_assunto = ttk.Entry(self.frame_6)
         self.n_assunto.config(justify='center')
@@ -96,7 +85,6 @@ class GuiMail02App:
         self.notebook_2.add(self.frame_7, state='normal', text='E-mail')
         self.notebook_2.config(height='280', width='490')
         self.notebook_2.place(anchor='center', relx='0.50', rely='0.52', x='0', y='0')
-        self.notebook_2.bind('', self.callback, add='')
         self.button_config_ok = ttk.Button(self.frame_5)
         self.button_config_ok.config(text='OK')
         self.button_config_ok.place(anchor='nw', relx='0.81', rely='0.93', x='0', y='0')
@@ -106,15 +94,13 @@ class GuiMail02App:
         self.button_save = ttk.Button(self.frame_5)
         self.button_save.config(text='Save')
         self.button_save.place(anchor='nw', relx='0.64', rely='0.93', x='0', y='0')
-        self.frame_5.config(height='400', text='E-mail', width='500')
+        self.frame_5.config(height='400', width='500')
         self.frame_5.pack(side='top')
-        self.dialog_3.config(height='100', modal='false', width='200')
+        # self.configuracao.config(height='100', modal='false', width='200')
 
         # Main widget
-        self.mainwindow = self.dialog_3
+        self.mainwindow = self.frame_5
 
-    def callback(self, event=None):
-        pass
 
     def run(self):
         self.mainwindow.mainloop()
@@ -122,6 +108,6 @@ class GuiMail02App:
 if __name__ == '__main__':
     import tkinter as tk
     root = tk.Tk()
-    app = GuiMail02App(root)
+    app = AutomailConfig(root)
     app.run()
 

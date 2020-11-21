@@ -210,7 +210,7 @@
       </object>
     </child>
   </object>
-  <object class="pygubu.builder.widgets.dialog" id="dialog_3">
+  <object class="pygubu.builder.widgets.dialog" id="configuracao">
     <property name="height">100</property>
     <property name="modal">false</property>
     <property name="width">200</property>
@@ -241,7 +241,6 @@
           <object class="ttk.Notebook" id="notebook_2">
             <property name="height">280</property>
             <property name="width">490</property>
-            <bind add="" handler="callback" sequence="" />
             <layout manager="place">
               <property name="anchor">center</property>
               <property name="relx">0.50</property>
