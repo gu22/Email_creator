@@ -4,8 +4,9 @@ Created on Thu Nov 19 19:15:42 2020
 
 @author: gusan
 """
-
-
+#--------------------------------------------------------------------------
+#                           IMPORTs
+#''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import Toplevel
@@ -14,6 +15,31 @@ from pygubu.widgets.scrollbarhelper import ScrollbarHelper
 from pygubu.widgets.dialog import Dialog
 from pygubu.widgets.scrollbarhelper import ScrollbarHelper
 
+
+#############################################################################
+#                               VARIAVEIS
+#############################################################################
+
+link_forms = ""
+email_controle = ""
+email_remetente = ""
+
+corpo_email = ""
+assinatura_email = ""
+
+
+
+
+
+
+
+
+
+
+
+#========================================================================
+#                       GUI
+#------------------------------------------------------------------------
 class Automail:
     def __init__(self, master=None):
         # build ui
