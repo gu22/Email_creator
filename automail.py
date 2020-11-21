@@ -20,19 +20,27 @@ from pygubu.widgets.scrollbarhelper import ScrollbarHelper
 #                               VARIAVEIS
 #############################################################################
 
+
 link_forms = ""
+planilha_chamados = ""
+
+
 email_controle = ""
 email_remetente = ""
+email_chamado = ""
 
+assunto_email = ""
 corpo_email = ""
 assinatura_email = ""
 
 
+smart_paste = ""
 
+text_output = ""
 
-
-
-
+coluna_chamado = ""
+coluna_email = ""
+coluna_assunto = ""
 
 
 
