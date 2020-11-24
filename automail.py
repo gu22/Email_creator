@@ -10,18 +10,41 @@ Created on Thu Nov 19 19:15:42 2020
 import tkinter as tk
 import tkinter.ttk as ttk
 from tkinter import Toplevel
+import pygubu
 from pygubu.widgets.pathchooserinput import PathChooserInput
 from pygubu.widgets.scrollbarhelper import ScrollbarHelper
-from pygubu.widgets.dialog import Dialog
-from pygubu.widgets.scrollbarhelper import ScrollbarHelper
+
+
+
+import configparser
+
+
+#[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+#                                   ROTINAS
+#[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
+
+default = configparser.ConfigParser()
+
+
+try:
+     default.read('Configuracao.ini')
+except:
+    pass
+    
+
+
+
+
+
 
 
 #############################################################################
 #                               VARIAVEIS
 #############################################################################
+    
 
 
-link_forms = ""
+link_forms = default['DEFAULT']['link_forms']
 planilha_chamados = ""
 
 
@@ -108,6 +131,16 @@ class Automail:
 
         # Main widget
         self.mainwindow = self.base_ds
+
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+#                                   INICIALIZAÇÃO
+#+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+        
+        self.forms_link.insert(0,link_forms)
+
+
+
+
 
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 #                                       CHAMANDO FUNÇÕES
