@@ -15,7 +15,7 @@ from pygubu.widgets.pathchooserinput import PathChooserInput
 from pygubu.widgets.scrollbarhelper import ScrollbarHelper
 
 
-
+import win32com.client
 import configparser
 
 
@@ -53,7 +53,7 @@ email_remetente = ""
 email_chamado = ""
 
 assunto_email = ""
-corpo_email = ""
+corpo_email = default['Email']['corpo']
 assinatura_email = ""
 
 
@@ -119,8 +119,7 @@ class Automail:
         self.output = tk.Text(self.scrollbarhelper_2.container)
         self.output.config(height='10', relief='flat', state='normal', undo='false')
         self.output.config(width='50')
-        _text_ = '''Output'''
-        self.output.insert('0.0', _text_)
+        
         self.output.place(anchor='nw', width='120', x='0', y='0')
         self.scrollbarhelper_2.add_child(self.output)
         # TODO - self.scrollbarhelper_2: code for custom option 'usemousewheel' not implemented.
@@ -148,7 +147,8 @@ class Automail:
 
         self.button_ok.config(command=self.sair)
         self.button_config.config(command=self.setting)
-
+        
+        self.button_enviar.config(command=self.enviar)
 
 
 
@@ -183,7 +183,22 @@ class Automail:
 
     # def configuracao(self):
     #     top = Toplevel(AutomailConfig())
-
+    
+    def enviar(self):
+        global corpo_email
+        corpo_emailhtml = corpo_email.replace('\n', '<br>')
+        outlook = win32com.client.Dispatch('Outlook.Application')
+        email = outlook.CreateItem(0)
+        
+    
+        email.BodyFormat= 1
+        email.Subject= "assunto"
+       
+        email.HTMLBody= corpo_emailhtml
+        email.Display(False)
+        
+        
+        self.output.insert("0.0", corpo_email)
 
 
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111
