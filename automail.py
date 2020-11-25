@@ -18,6 +18,8 @@ from pygubu.widgets.scrollbarhelper import ScrollbarHelper
 import win32com.client
 import configparser
 
+import time
+
 
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 #                                   ROTINAS
@@ -41,32 +43,33 @@ except:
 #############################################################################
 #                               VARIAVEIS
 #############################################################################
-    
+padrao = default['DEFAULT']
+padrao_email = default['Email']
+padrao_planilha = default['Planilha']
 
+# Set informações do arquivo Configuração.ini
+# try:
+link_forms = padrao['link_forms']
 
-link_forms = default['DEFAULT']['link_forms']
-planilha_chamados = ""
+email_controle = padrao_email['controle']
+email_remetente = padrao_email['remetente']
 
+assunto_email = padrao_email['assunto']
+corpo_email = padrao_email['corpo']
+assinatura_email = padrao_email['assinatura']
 
-email_controle = ""
-email_remetente = ""
-email_chamado = ""
+coluna_chamado = padrao_planilha['colunaChamados']
+coluna_email = padrao_planilha['colunaEmails']
+coluna_assunto = padrao_planilha['colunaAssuntos']
 
-assunto_email = ""
-corpo_email = default['Email']['corpo']
-assinatura_email = ""
+# except:
+#     print('Exceção ativada')
 
-
-smart_paste = ""
 
 text_output = ""
-
-coluna_chamado = ""
-coluna_email = ""
-coluna_assunto = ""
-
-
-
+planilha_chamados = ""
+email_chamado = ""
+smart_paste = ""
 
 #========================================================================
 #                       GUI
@@ -297,15 +300,64 @@ class Automail:
             self.frame_5.config(height='400', width='500')
             self.frame_5.pack(side='top')
             # self.configuracao.config(height='100', modal='false', width='200')
-    
+            # _text_ = '''test'''
+            # self.campo_de.delete('0', 'end')
+            # self.campo_de.insert('0', _text_)
             # Main widget
             self.mainwindow = self.frame_5
-    
-    
+
+    #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    #                                INICIALIZAÇÃO
+    #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+            self.n_chamado.insert(0,coluna_chamado )
+            self.n_assunto.insert(0,coluna_assunto )
+            self.n_email.insert(0, coluna_email)
+
+
+            # self.notebook_2.bind('<<NotebookTabChanged>>', self.Bay)
+            self.campo_assunto.insert(0,assunto_email)
+            self.campo_de.insert(0,email_remetente)
+            # self.campo_assunto(0,'teste')
+            # self.campo_de(0,'teste2')
+            # self.text_msg.delete('0.0', 'end')
+            self.text_msg.insert("0.0",corpo_email)
+            # self.text_ass("0.0",assinatura_email)
+
+        # def Bay (self, event=None):
+        #     tst = self.notebook_2.index('current')
+        #     print (tst)
+        #     print(type(tst))
+        #     if tst == 1:
+        #         print("ola")
+        #         # time.sleep(5)
+        #         # self.campo_assunto('0',assunto_email)
+
+        #         self.campo_de.delete('0', 'end')
+        #         self.campo_de.insert('0',"fununfa que blz")
+
+            pass
+
         def run(self):
             self.mainwindow.mainloop()
 
+        # def run(self):
+        #     global email_remetente,coluna_assunto,coluna_chamado,coluna_email
+        #     self.mainwindow.mainloop()
 
+
+
+#---------------------------------------------------------------------------------
+#                               FUNÇÕES CONFIGURAÇÕES
+#--------------------------------------------------------------------------------
+
+
+
+
+
+
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
     def setting(self):
         print('ok')
