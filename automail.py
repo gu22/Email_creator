@@ -20,6 +20,7 @@ import configparser
 
 import time
 
+import pandas as pd
 
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 #                                   ROTINAS
@@ -70,6 +71,16 @@ text_output = ""
 planilha_chamados = ""
 email_chamado = ""
 smart_paste = ""
+
+excel = pd.read_excel('teste.xlsx')
+
+#============================================================================
+#                           TRATAMENTO DADOS
+#===========================================================================
+
+colunas = list(excel.columns)
+
+
 
 #========================================================================
 #                       GUI
@@ -322,7 +333,19 @@ class Automail:
             # self.campo_de(0,'teste2')
             # self.text_msg.delete('0.0', 'end')
             self.text_msg.insert("0.0",corpo_email)
-            # self.text_ass("0.0",assinatura_email)
+            self.text_ass.insert("0.0",assinatura_email)
+            
+            self.treeview_1['columns'] = colunas
+           
+            for i in colunas:
+                self.treeview_1.column(i, width=50,stretch=False)
+                self.treeview_1.heading(i, text=i)
+                
+            for index, row in excel.iterrows():
+                self.treeview_1.insert("",0,text=index,values=list(row))
+    
+            # definindo largura da coluna de INDEX
+            self.treeview_1.column('#0',width=50)
 
         # def Bay (self, event=None):
         #     tst = self.notebook_2.index('current')
