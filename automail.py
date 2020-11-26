@@ -71,14 +71,15 @@ text_output = ""
 planilha_chamados = ""
 email_chamado = ""
 smart_paste = ""
-
-excel = pd.read_excel('teste.xlsx')
+excel = ""
+X = 0
+# excel = pd.read_excel('teste.xlsx')
 
 #============================================================================
 #                           TRATAMENTO DADOS
 #===========================================================================
 
-colunas = list(excel.columns)
+# colunas = list(excel.columns)
 
 
 
@@ -151,7 +152,7 @@ class Automail:
         
         self.forms_link.insert(0,link_forms)
 
-
+        
 
 
 
@@ -164,7 +165,7 @@ class Automail:
         
         self.button_enviar.config(command=self.enviar)
 
-
+        self.arquivo_ch.bind('<<PathChooserPathChanged>>', self.arquivo_excel)
 
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 #////////////////////////////////////////////////////////////////////////////////////////////
@@ -180,6 +181,8 @@ class Automail:
     def run(self):
             self.mainwindow.mainloop()
             
+    
+            
 
 
 
@@ -194,7 +197,9 @@ class Automail:
 
     def sair(self):
         root.destroy()
-
+        root_config.destroy()
+        
+        
     # def configuracao(self):
     #     top = Toplevel(AutomailConfig())
     
@@ -213,7 +218,22 @@ class Automail:
         
         
         self.output.insert("0.0", corpo_email)
-
+        
+        
+    def arquivo_excel(self,event=None):
+        global excel
+        global colunas
+        global X
+        excel = self.arquivo_ch.cget('path')
+        try:
+            excel = pd.read_excel(excel)
+            colunas = list(excel.columns)
+            X = 1
+            print ('Arquivo carregado')
+        except:
+         print ("Arquivo não pode ser carregado")
+         X = 0
+         self.arquivo_ch.configure(path="")
 
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -335,17 +355,21 @@ class Automail:
             self.text_msg.insert("0.0",corpo_email)
             self.text_ass.insert("0.0",assinatura_email)
             
-            self.treeview_1['columns'] = colunas
+            global excel
+            global colunas
+            global X
+            if not X == 0:
+                self.treeview_1['columns'] = colunas
            
-            for i in colunas:
-                self.treeview_1.column(i, width=50,stretch=False)
-                self.treeview_1.heading(i, text=i)
-                
-            for index, row in excel.iterrows():
-                self.treeview_1.insert("",0,text=index,values=list(row))
-    
-            # definindo largura da coluna de INDEX
-            self.treeview_1.column('#0',width=50)
+                for i in colunas:
+                    self.treeview_1.column(i, width=50,stretch=False,anchor='n')
+                    self.treeview_1.heading(i, text=i)
+                    
+                for index, row in excel.iterrows():
+                    self.treeview_1.insert("",0,text=index,values=list(row))
+        
+                # definindo largura da coluna de INDEX
+                self.treeview_1.column('#0',width=50)
 
         # def Bay (self, event=None):
         #     tst = self.notebook_2.index('current')
@@ -374,19 +398,30 @@ class Automail:
 #                               FUNÇÕES CONFIGURAÇÕES
 #--------------------------------------------------------------------------------
 
+    def setting(self):
+        global root_config
+        print('ok')
+        root_config = tk.Tk()
+        
+        w2=550
+        h2=300
+        ws=root.winfo_screenwidth()
+        hs=root.winfo_screenheight()
+        x2=(ws/2)-(w2/2)
+        y2=(hs/2)-(h2/2)
+        root_config.geometry('+%d+%d'%(x2,y2))
+        
+        
+        opcoes = self.AutomailConfig(root_config)
 
-
-
+    # def sair_setting(self):
+    #     root_config.destroy()
 
 
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
-    def setting(self):
-        print('ok')
-        root_config = tk.Tk()
-        root_config.geometry('+%d+%d'%(x,y))
-        opcoes = self.AutomailConfig(root_config)
+    
         
 
 
