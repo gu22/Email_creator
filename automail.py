@@ -9,7 +9,7 @@ Created on Thu Nov 19 19:15:42 2020
 #''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 import tkinter as tk
 import tkinter.ttk as ttk
-from tkinter import Toplevel
+
 import pygubu
 from pygubu.widgets.pathchooserinput import PathChooserInput
 from pygubu.widgets.scrollbarhelper import ScrollbarHelper
@@ -22,7 +22,7 @@ import time
 
 import pandas as pd
 
-import atexit
+
 
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 #                                   ROTINAS
@@ -515,7 +515,7 @@ class Automail:
 #============================================================================================
 
 if __name__ == '__main__':
-    import tkinter as tk
+
     root = tk.Tk()
     
     w=700
