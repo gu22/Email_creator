@@ -51,7 +51,7 @@ padrao_email = default['Email']
 padrao_planilha = default['Planilha']
 
 # Set informações do arquivo Configuração.ini
-# try:
+
 link_forms = padrao['link_forms']
 
 email_controle = padrao_email['controle']
@@ -65,8 +65,7 @@ coluna_chamado = padrao_planilha['colunaChamados']
 coluna_email = padrao_planilha['colunaEmails']
 coluna_assunto = padrao_planilha['colunaAssuntos']
 
-# except:
-#     print('Exceção ativada')
+
 
 
 text_output = ""
@@ -111,7 +110,6 @@ class Automail:
         self.separator_2.place(anchor='nw', relx='0.0', rely='0.47', width='600', y='0')
         self.arquivo_ch = PathChooserInput(self.base_ds)
         self.arquivo_ch.config(type='file')
-        # TODO - self.arquivo_ch: code for custom option 'textvariable' not implemented.
         self.arquivo_ch.place(anchor='nw', relx='0.01', rely='0.38', width='465', x='0', y='0')
         self.label_arquivo = ttk.Label(self.base_ds)
         self.label_arquivo.config(text='Excel com chamados')
@@ -142,7 +140,6 @@ class Automail:
         
         self.output.place(anchor='nw', width='120', x='0', y='0')
         self.scrollbarhelper_2.add_child(self.output)
-        # TODO - self.scrollbarhelper_2: code for custom option 'usemousewheel' not implemented.
         self.scrollbarhelper_2.place(anchor='nw', height='190', relx='0.01', rely='0.51', width='355', x='0', y='0')
         self.base_ds.config(height='400', relief='flat', width='600')
         self.base_ds.pack(anchor='center', expand='false', side='top')
@@ -155,11 +152,11 @@ class Automail:
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #                                   INICIALIZAÇÃO
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-        
+
         self.forms_link.insert(0,link_forms)
         self.mail_control.insert(0, email_controle)
 
-        
+
 
 
 
@@ -187,9 +184,8 @@ class Automail:
 
     def run(self):
             self.mainwindow.mainloop()
-            
-    
-            
+
+
 
 
 
@@ -197,37 +193,32 @@ class Automail:
 #--------------------------------------------------------------------------------------------
 #                                           FUNÇÕES
 #---------------------------------------------------------------------------------------------
-    # def sair(self):
-
-    #     Automail().destroy()
-    #     print("sair...")
 
     def sair(self):
         root.destroy()
         if obs ==1:
             root_config.destroy()
-        
-        
-    # def configuracao(self):
-    #     top = Toplevel(AutomailConfig())
-    
+
+
+
+
     def enviar(self):
         global corpo_email
         corpo_emailhtml = corpo_email.replace('\n', '<br>')
         outlook = win32com.client.Dispatch('Outlook.Application')
         email = outlook.CreateItem(0)
-        
-    
+
+
         email.BodyFormat= 1
         email.Subject= "assunto"
        
         email.HTMLBody= corpo_emailhtml
         email.Display(False)
-        
-        
+
+
         self.output.insert("0.0", corpo_email)
-        
-        
+
+
     def arquivo_excel(self,event=None):
         global excel
         global colunas
@@ -243,13 +234,13 @@ class Automail:
          X = 0
          self.arquivo_ch.configure(path="")
 
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!111
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
+#$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 
     class AutomailConfig:
         def __init__(self, master=None):
             # build ui
-            # self.configuracao = Dialog(master)
+
             self.frame_5 = ttk.Frame(master)
             self.label_6 = ttk.Label(self.frame_5)
             self.label_6.config(anchor='center', font='{Arial} 20 {bold}', text='Configurações')
@@ -278,7 +269,6 @@ class Automail:
             self.treeview_1 = ttk.Treeview(self.scrollbarhelper_3.container)
             self.treeview_1.pack(side='top')
             self.scrollbarhelper_3.add_child(self.treeview_1)
-            # TODO - self.scrollbarhelper_3: code for custom option 'usemousewheel' not implemented.
             self.scrollbarhelper_3.place(anchor='nw', relx='0.01', rely='0.15', width='480', x='0', y='0')
             self.frame_6.config(height='150', width='150')
             self.frame_6.place(anchor='nw', relx='0.0', x='0', y='0')
@@ -338,10 +328,7 @@ class Automail:
             self.button_save.place(anchor='nw', relx='0.64', rely='0.93', x='0', y='0')
             self.frame_5.config(height='400', width='500')
             self.frame_5.pack(side='top')
-            # self.configuracao.config(height='100', modal='false', width='200')
-            # _text_ = '''test'''
-            # self.campo_de.delete('0', 'end')
-            # self.campo_de.insert('0', _text_)
+
             # Main widget
             self.mainwindow = self.frame_5
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
@@ -383,26 +370,13 @@ class Automail:
                 # definindo largura da coluna de INDEX
                 self.treeview_1.column('#0',width=50)
 
-        # def Bay (self, event=None):
-        #     tst = self.notebook_2.index('current')
-        #     print (tst)
-        #     print(type(tst))
-        #     if tst == 1:
-        #         print("ola")
-        #         # time.sleep(5)
-        #         # self.campo_assunto('0',assunto_email)
 
-        #         self.campo_de.delete('0', 'end')
-        #         self.campo_de.insert('0',"fununfa que blz")
 
-            # pass
+
 
         def run(self):
             self.mainwindow.mainloop()
 
-        # def run(self):
-        #     global email_remetente,coluna_assunto,coluna_chamado,coluna_email
-        #     self.mainwindow.mainloop()
 
 
 
@@ -419,8 +393,6 @@ class Automail:
             print('Fechou')
 
         def save(self):
-            # global link_forms
-            # link_forms = self.forms_link.get()
 
             # Janela Principal
             padrao['link_forms'] = link_forms
@@ -479,31 +451,6 @@ class Automail:
             #     pass
 
 
-
-
-
-    # if obs ==1:
-    #     root_config.protocol("WM_DELETE_WINDOW",sair_config)
-
-    # atexit.register(sair_config)
-
-    # def sair_setting(self):
-    #     root_config.destroy()
-
-
-
-
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-#!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-
-    
-        
-
-
-
-
-
-    
 
 
 
