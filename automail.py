@@ -22,6 +22,8 @@ import time
 
 import pandas as pd
 
+import atexit
+
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 #                                   ROTINAS
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
@@ -72,7 +74,10 @@ planilha_chamados = ""
 email_chamado = ""
 smart_paste = ""
 excel = ""
+
+
 X = 0
+obs = 0
 # excel = pd.read_excel('teste.xlsx')
 
 #============================================================================
@@ -146,6 +151,7 @@ class Automail:
         # Main widget
         self.mainwindow = self.base_ds
 
+
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #                                   INICIALIZAÇÃO
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -197,7 +203,8 @@ class Automail:
 
     def sair(self):
         root.destroy()
-        root_config.destroy()
+        if obs ==1:
+            root_config.destroy()
         
         
     # def configuracao(self):
@@ -336,6 +343,13 @@ class Automail:
             # self.campo_de.insert('0', _text_)
             # Main widget
             self.mainwindow = self.frame_5
+#\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+#                                       CHAMANDO FUNÇÕES
+#///////////////////////////////////////////////////////////////////////////////////////////
+
+            self.button_save.config(command=self.save)
+
+            # self.mainwindow.protocol("WM_DELETE_WINDOW",self.sair_config)
 
     #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     #                                INICIALIZAÇÃO
@@ -383,7 +397,7 @@ class Automail:
         #         self.campo_de.delete('0', 'end')
         #         self.campo_de.insert('0',"fununfa que blz")
 
-            pass
+            # pass
 
         def run(self):
             self.mainwindow.mainloop()
@@ -394,28 +408,72 @@ class Automail:
 
 
 
+
+
+
 #---------------------------------------------------------------------------------
 #                               FUNÇÕES CONFIGURAÇÕES
 #--------------------------------------------------------------------------------
 
+        def sair_config():
+            global obs
+            obs = 0
+            print('Fechou')
+
+        def save(self):
+            global link_forms
+            # link_forms = self.forms_link.get()
+            print (link_forms)
+
+
+
     def setting(self):
-        global root_config
+        global root_config,link_forms,obs
         print('ok')
-        root_config = tk.Tk()
-        
-        w2=550
-        h2=300
-        ws=root.winfo_screenwidth()
-        hs=root.winfo_screenheight()
-        x2=(ws/2)-(w2/2)
-        y2=(hs/2)-(h2/2)
-        root_config.geometry('+%d+%d'%(x2,y2))
-        
-        
-        opcoes = self.AutomailConfig(root_config)
+
+        if obs ==0:
+            root_config = tk.Tk()
+            
+            w2=550
+            h2=300
+            ws=root.winfo_screenwidth()
+            hs=root.winfo_screenheight()
+            x2=(ws/2)-(w2/2)
+            y2=(hs/2)-(h2/2)
+            root_config.geometry('+%d+%d'%(x2,y2))
+            
+            
+            opcoes = self.AutomailConfig(root_config)
+            link_forms = self.forms_link.get()
+            print (link_forms)
+            obs = 1
+
+
+            def sair_config():
+                global obs
+                obs = 0
+                print('Fechou')
+                root_config.destroy()
+
+            # try:
+            root_config.protocol("WM_DELETE_WINDOW", sair_config)
+            # except tk.TclError:
+            #     print("saindo")
+            #     pass
+
+
+
+
+
+    # if obs ==1:
+    #     root_config.protocol("WM_DELETE_WINDOW",sair_config)
+
+    # atexit.register(sair_config)
 
     # def sair_setting(self):
     #     root_config.destroy()
+
+
 
 
 #!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
@@ -456,5 +514,6 @@ if __name__ == '__main__':
     app = Automail(root)
     # appconfig = AutomailConfig(root)
     app.run()
+
 
 
