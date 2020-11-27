@@ -42,7 +42,7 @@ except:
 
 
 
-
+#!!!!!!!!!!!!!!!!!!!!!!
 #############################################################################
 #                               VARIAVEIS
 #############################################################################
@@ -157,6 +157,7 @@ class Automail:
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
         
         self.forms_link.insert(0,link_forms)
+        self.mail_control.insert(0, email_controle)
 
         
 
@@ -359,19 +360,16 @@ class Automail:
             self.n_assunto.insert(0,coluna_assunto )
             self.n_email.insert(0, coluna_email)
 
-
-            # self.notebook_2.bind('<<NotebookTabChanged>>', self.Bay)
             self.campo_assunto.insert(0,assunto_email)
             self.campo_de.insert(0,email_remetente)
-            # self.campo_assunto(0,'teste')
-            # self.campo_de(0,'teste2')
-            # self.text_msg.delete('0.0', 'end')
+
             self.text_msg.insert("0.0",corpo_email)
             self.text_ass.insert("0.0",assinatura_email)
-            
-            global excel
-            global colunas
-            global X
+
+
+
+            global excel,colunas,X
+
             if not X == 0:
                 self.treeview_1['columns'] = colunas
            
@@ -421,14 +419,29 @@ class Automail:
             print('Fechou')
 
         def save(self):
-            global link_forms
+            # global link_forms
             # link_forms = self.forms_link.get()
-            print (link_forms)
+
+            # Janela Principal
+            padrao['link_forms'] = link_forms
+            padrao_email['controle'] = email_controle
+            # # Janela Configuraçoes
+            # padrao_email['remetente']
+            # padrao_email['assunto']
+            # padrao_email['corpo']
+            # padrao_email['assinatura']
+            
+            # padrao_planilha['colunaChamados']
+            # padrao_planilha['colunaEmails']
+            # padrao_planilha['colunaAssuntos']
+
+            with open ('Configuracao.ini','w') as stg:
+                default.write(stg)
 
 
 
     def setting(self):
-        global root_config,link_forms,obs
+        global root_config,link_forms,obs,email_controle
         print('ok')
 
         if obs ==0:
@@ -442,11 +455,15 @@ class Automail:
             y2=(hs/2)-(h2/2)
             root_config.geometry('+%d+%d'%(x2,y2))
             
-            
-            opcoes = self.AutomailConfig(root_config)
+            self.AutomailConfig(root_config)
+            obs = 1
+
+        ## HINT Get informações
             link_forms = self.forms_link.get()
             print (link_forms)
-            obs = 1
+            email_controle = self.mail_control.get()
+
+
 
 
             def sair_config():
