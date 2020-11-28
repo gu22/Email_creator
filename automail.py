@@ -73,7 +73,7 @@ planilha_chamados = ""
 email_chamado = ""
 smart_paste = ""
 excel = ""
-
+# config_excel =""
 
 X = 0
 obs = 0
@@ -84,6 +84,9 @@ obs = 0
 #===========================================================================
 
 # colunas = list(excel.columns)
+
+
+
 
 
 
@@ -147,7 +150,7 @@ class Automail:
 
         # Main widget
         self.mainwindow = self.base_ds
-
+        
 
 #+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 #                                   INICIALIZAÇÃO
@@ -155,6 +158,8 @@ class Automail:
 
         self.forms_link.insert(0,link_forms)
         self.mail_control.insert(0, email_controle)
+        
+        self.button_enviar.config(state='disabled')
 
 
 
@@ -220,19 +225,21 @@ class Automail:
 
 
     def arquivo_excel(self,event=None):
-        global excel
-        global colunas
-        global X
+        global excel,colunas,X,excel_config
+        
         excel = self.arquivo_ch.cget('path')
         try:
+            excel_config = pd.read_excel(excel)
             excel = pd.read_excel(excel)
-            colunas = list(excel.columns)
+            colunas = list(excel_config)
             X = 1
             print ('Arquivo carregado')
+            self.button_enviar.config(state='enabled')
         except:
          print ("Arquivo não pode ser carregado")
          X = 0
          self.arquivo_ch.configure(path="")
+         self.button_enviar.config(state='disabled')
 
 #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
@@ -336,12 +343,18 @@ class Automail:
 #///////////////////////////////////////////////////////////////////////////////////////////
 
             self.button_save.config(command=self.save)
+            
+            self.button_config_ok.config(command=self.ok_config)
+            
+            
 
             # self.mainwindow.protocol("WM_DELETE_WINDOW",self.sair_config)
 
     #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
     #                                INICIALIZAÇÃO
     #++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+
+            
 
             self.n_chamado.insert(0,coluna_chamado )
             self.n_assunto.insert(0,coluna_assunto )
@@ -355,20 +368,26 @@ class Automail:
 
 
 
-            global excel,colunas,X
+            global excel_config,colunas,X
 
             if not X == 0:
-                self.treeview_1['columns'] = colunas
+                index_c = list(range(1,(1+(len(excel_config.columns)))))
+                colunas_excel = list(index_c)
+                
+                self.treeview_1.config(selectmode="none")
+                self.treeview_1['columns'] = colunas_excel
            
-                for i in colunas:
-                    self.treeview_1.column(i, width=50,stretch=False,anchor='n')
+                for i in colunas_excel:
+                    self.treeview_1.column(i, width=100,anchor='n')
                     self.treeview_1.heading(i, text=i)
+                
+                self.treeview_1.insert("",'end',text=0,values=colunas)
                     
-                for index, row in excel.iterrows():
-                    self.treeview_1.insert("",0,text=index,values=list(row))
+                for index, row in excel_config.iterrows():
+                    self.treeview_1.insert("",'end',text=(index+1),values=list(row))
         
                 # definindo largura da coluna de INDEX
-                self.treeview_1.column('#0',width=50)
+                self.treeview_1.column('#0',width=30)
 
 
 
@@ -410,7 +429,10 @@ class Automail:
             with open ('Configuracao.ini','w') as stg:
                 default.write(stg)
 
-
+        def ok_config(self):
+            global obs
+            root_config.destroy()
+            obs = 0
 
     def setting(self):
         global root_config,link_forms,obs,email_controle
@@ -479,5 +501,14 @@ if __name__ == '__main__':
     # appconfig = AutomailConfig(root)
     app.run()
 
+# ========================================================================================
+#HINT Helpers
 
-
+    # Print todas as infos *pandas*
+# with pd.option_context('display.max_rows', None, 'display.max_columns', None):  
+    # print(df)
+    
+    # Adicionar linha inicio *pandas*
+# excel.loc[-1] =
+# excel.index = excel.index+1
+# excel = excel.sort_index()
