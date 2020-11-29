@@ -66,7 +66,11 @@ coluna_email = padrao_planilha['colunaEmails']
 coluna_assunto = padrao_planilha['colunaAssuntos']
 
 
+corpo_fonte = ""
+corpo_tamanho =""
 
+assinatura_fonte = ""
+assinatura_tamanho =""
 
 text_output = ""
 planilha_chamados = ""
@@ -430,9 +434,25 @@ class Automail:
                 default.write(stg)
 
         def ok_config(self):
-            global obs
+            global obs,coluna_chamado,coluna_assunto,coluna_email
+            global assunto_email,email_remetente,corpo_email,assinatura_email
+            coluna_chamado = self.n_chamado.get()
+            coluna_assunto = self.n_assunto.get()
+            coluna_email = self.n_email.get()
+            
+            assunto_email = self.campo_assunto.get()
+            email_remetente = self.campo_de.get()
+
+            corpo_email = self.text_msg.get("0.0",'end-1c')
+            assinatura_email = self.text_ass.get("0.0",'end-1c')
+            
+            
             root_config.destroy()
             obs = 0
+
+
+
+
 
     def setting(self):
         global root_config,link_forms,obs,email_controle
