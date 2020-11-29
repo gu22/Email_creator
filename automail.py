@@ -82,7 +82,7 @@ excel = ""
 X = 0
 obs = 0
 # excel = pd.read_excel('teste.xlsx')
-
+bz = 0
 #============================================================================
 #                           TRATAMENTO DADOS
 #===========================================================================
@@ -178,7 +178,10 @@ class Automail:
         
         self.button_enviar.config(command=self.enviar)
 
+
         self.arquivo_ch.bind('<<PathChooserPathChanged>>', self.arquivo_excel)
+
+
 
 #\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
 #////////////////////////////////////////////////////////////////////////////////////////////
@@ -229,8 +232,8 @@ class Automail:
 
 
     def arquivo_excel(self,event=None):
-        global excel,colunas,X,excel_config
-        
+        global excel,colunas,X,excel_config,bz
+        bz=0
         excel = self.arquivo_ch.cget('path')
         try:
             excel_config = pd.read_excel(excel)
@@ -239,11 +242,22 @@ class Automail:
             X = 1
             print ('Arquivo carregado')
             self.button_enviar.config(state='enabled')
+            self.output.insert("end","Arquivo carregado\n-----------------\n")
         except:
-         print ("Arquivo não pode ser carregado")
-         X = 0
-         self.arquivo_ch.configure(path="")
-         self.button_enviar.config(state='disabled')
+            self.arquivo_ch.configure(path="")
+            if bz == 0:
+                print ("Arquivo não pode ser carregado")
+                self.output.insert("end","Arquivo não pode ser carregado, extensão não suportada, extensão necessária: XLSX\n------------------------------\n")
+
+                X = 0
+            # self.arquivo_ch.configure(path="")
+                self.button_enviar.config(state='disabled')
+                bz=1
+
+
+
+    def clean(self):
+        self.arquivo_ch.configure(path="")
 
 #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
 #$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$
