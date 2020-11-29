@@ -421,14 +421,14 @@ class Automail:
             padrao['link_forms'] = link_forms
             padrao_email['controle'] = email_controle
             # # Janela Configuraçoes
-            # padrao_email['remetente']
-            # padrao_email['assunto']
-            # padrao_email['corpo']
-            # padrao_email['assinatura']
+            padrao_email['remetente'] = self.campo_de.get()
+            padrao_email['assunto'] = self.campo_assunto.get()
+            padrao_email['corpo'] = self.text_msg.get("0.0",'end-1c')
+            padrao_email['assinatura'] = self.text_ass.get("0.0",'end-1c')
             
-            # padrao_planilha['colunaChamados']
-            # padrao_planilha['colunaEmails']
-            # padrao_planilha['colunaAssuntos']
+            padrao_planilha['colunaChamados'] = self.n_chamado.get()
+            padrao_planilha['colunaEmails'] = self.n_email.get()
+            padrao_planilha['colunaAssuntos'] = self.n_assunto.get()
 
             with open ('Configuracao.ini','w') as stg:
                 default.write(stg)
