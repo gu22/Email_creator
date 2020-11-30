@@ -20,6 +20,8 @@ import configparser
 
 import time
 
+import openpyxl
+from openpyxl import load_workbook
 import pandas as pd
 
 
@@ -65,6 +67,8 @@ coluna_chamado = padrao_planilha['colunaChamados']
 coluna_email = padrao_planilha['colunaEmails']
 coluna_assunto = padrao_planilha['colunaAssuntos']
 
+coluna_responsavel_chm = padrao_planilha['colunaresponsavel']
+
 
 corpo_fonte = ""
 corpo_tamanho =""
@@ -78,6 +82,16 @@ email_chamado = ""
 smart_paste = ""
 excel = ""
 # config_excel =""
+
+
+
+resp = []
+envio = []
+recusa = []
+
+
+
+
 
 X = 0
 obs = 0
@@ -214,21 +228,92 @@ class Automail:
 
 
 
+
+
+
+
+
+##############################################################################
+#!!! EMAIL
+
     def enviar(self):
-        global corpo_email
-        corpo_emailhtml = corpo_email.replace('\n', '<br>')
-        outlook = win32com.client.Dispatch('Outlook.Application')
-        email = outlook.CreateItem(0)
+        global corpo_email,excel
+        excel['Envio email'] = "nan"
+        ncolunas = len(excel.columns)
+        nlinhas = len(excel.index)
 
 
-        email.BodyFormat= 1
-        email.Subject= "assunto"
-       
-        email.HTMLBody= corpo_emailhtml
-        email.Display(False)
+        ## TRATAMENTO DOS DADOS
+        for i in range(nlinhas):
+            
+            
+            # Pegando valores da base dados
+            campo_chamado = excel.columns[int(coluna_chamado)]
+            try:
+                numero_chamado = int(excel.loc[i][int(coluna_chamado)])
+            except:
+                excel.iat[i,ncolunas] = "Falta n° chamado"
+                continue
+            
+            nome_chamado = excel.loc[i][int(coluna_assunto)]
+        
+            #cliente = excel.loc[i][13]
+            
+            responsavel = excel.loc[i][int(coluna_responsavel_chm)]
+            
+            email_destino = excel.loc[i][int(coluna_email)]
+            
+            if str(nome_chamado) == 'nan':
+                excel.iat[i,ncolunas] = "Falta Assunto do chamado"
+                recusa.append(" {};".format(numero_chamado))
+                continue
+            
+            if str(email_destino) == "nan":
+                excel.iat[i,ncolunas] = "Falta email"
+                recusa.append(" {};".format(numero_chamado))
+                continue
+            else:
+                excel.iat[i,ncolunas] = "Em preparação"
+            
+            # filtrando os reponsaveis pelos chamados
+            if not resp:
+                resp.append(responsavel)
+            elif responsavel not in resp:
+                resp.append(responsavel)
 
 
-        self.output.insert("0.0", corpo_email)
+
+            corpo_emailhtml = corpo_email.replace('\n', '<br>')
+            assinatura_emailhtml = assinatura_email.replace('\n', '<br>')
+            outlook = win32com.client.Dispatch('Outlook.Application')
+            email = outlook.CreateItem(0)
+    
+    
+            email.BodyFormat= 2
+            email.Subject= assunto_email
+            email.To = email_destino
+
+            email.HTMLBody= (corpo_emailhtml+"<p>"+assinatura_emailhtml+"<\p>")
+            if email_remetente == "":
+                pass
+            else:
+                 email.SentOnBehalfOfName= email_remetente
+    
+            email.Display(False)
+    
+    
+            # self.output.insert("0.0", corpo_email)
+
+
+##############################################################################
+
+
+
+
+
+
+
+
 
 
     def arquivo_excel(self,event=None):
@@ -363,7 +448,8 @@ class Automail:
             self.button_save.config(command=self.save)
             
             self.button_config_ok.config(command=self.ok_config)
-            
+
+            self.button_preview.config(command=self.preview)
             
 
             # self.mainwindow.protocol("WM_DELETE_WINDOW",self.sair_config)
@@ -430,6 +516,20 @@ class Automail:
             print('Fechou')
 
         def save(self):
+            global obs,coluna_chamado,coluna_assunto,coluna_email
+            global assunto_email,email_remetente,corpo_email,assinatura_email
+
+
+            coluna_chamado = self.n_chamado.get()
+            coluna_assunto = self.n_assunto.get()
+            coluna_email = self.n_email.get()
+            
+            assunto_email = self.campo_assunto.get()
+            email_remetente = self.campo_de.get()
+
+            corpo_email = self.text_msg.get("0.0",'end-1c')
+            assinatura_email = self.text_ass.get("0.0",'end-1c')
+
 
             # Janela Principal
             padrao['link_forms'] = link_forms
@@ -443,7 +543,7 @@ class Automail:
             padrao_planilha['colunaChamados'] = self.n_chamado.get()
             padrao_planilha['colunaEmails'] = self.n_email.get()
             padrao_planilha['colunaAssuntos'] = self.n_assunto.get()
-
+           #Salvando arquivo config
             with open ('Configuracao.ini','w') as stg:
                 default.write(stg)
 
@@ -464,7 +564,28 @@ class Automail:
             root_config.destroy()
             obs = 0
 
+        def preview(self):
+            global corpo_email,assunto_email,email_remetente
+            corpo_emailhtml = corpo_email.replace('\n', '<br>')
+            assinatura_emailhtml = assinatura_email.replace('\n', '<br>')
+            outlook = win32com.client.Dispatch('Outlook.Application')
+            email = outlook.CreateItem(0)
+    
+    
+            email.BodyFormat= 2
+            email.Subject= assunto_email
 
+
+            email.HTMLBody= (corpo_emailhtml+"<p>"+assinatura_emailhtml+"<\p>")
+            if email_remetente == "":
+                pass
+            else:
+                 email.SentOnBehalfOfName= email_remetente
+    
+            email.Display(False)
+    
+    
+            self.output.insert("end", (corpo_email+"\n------------\n"))
 
 
 
@@ -546,3 +667,6 @@ if __name__ == '__main__':
 # excel.loc[-1] =
 # excel.index = excel.index+1
 # excel = excel.sort_index()
+
+
+#email, teste -- SendUsingAccount
