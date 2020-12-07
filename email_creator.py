@@ -159,14 +159,10 @@ for i in range(nlinhas):
 <p style="margin: 0cm; margin-bottom: .0001pt;">Link: <a href="{}">{}</a></p>
 <p style="margin: 0cm; margin-bottom: .0001pt;">&nbsp;</p>
 <p style="margin: 0cm; margin-bottom: .0001pt;">Agradecemos a colabora&ccedil;&atilde;o!</p>
-<p>Atenciosamente / Best regards,</p>
-<p>&nbsp;<br /><span style="font-size: 20px; ont-family: Arial;"><strong><span style="color: #de0043;"><em>Central de Intera&ccedil;&atilde;o</em></span></strong></span>&nbsp;<br /><span style="color: #10384f;"><strong>Customer Interaction</strong></span></p>
-<p><span style="color: #3adeff; letter-spacing: -1px; font-size: 16px;"><strong>////////////////////</strong></span></p>
-<p>Bayer Brazil &ndash; Crop Science</p>
-<p>Contatos:<br />Tel: 0800 940 6000 (Op&ccedil;&atilde;o 1)<br />E-mail: <a href="mailto:cal.monsanto.brasil@monsanto.com">cal.monsanto.brasil@monsanto.com</a>&nbsp;<br />Web: <a href="http://www.bayer.com">http://www.bayer.com&lt;\a&gt;</a></p>
-<p>&nbsp;</p>
+<p>Atenciosamente,</p>
+<p>Central Intera&ccedil;&otilde;es.</p>
     
-    
+        
     
     """.format(saudacao_email,numero_chamado,nome_chamado,descricao,linkp,linkp)
     # """.format(saudacao_email,numero_chamado,pesquisa)
