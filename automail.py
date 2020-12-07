@@ -585,7 +585,7 @@ class Automail:
             email.Display(False)
     
     
-            self.output.insert("end", (corpo_email+"\n------------\n"))
+            # self.output.insert("end", (corpo_email+"\n------------\n"))
 
 
 

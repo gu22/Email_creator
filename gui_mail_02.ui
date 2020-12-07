@@ -258,6 +258,7 @@
                     <layout manager="place">
                       <property name="anchor">nw</property>
                       <property name="relx">0.0</property>
+                      <property name="rely">0.0</property>
                       <property name="x">0</property>
                       <property name="y">0</property>
                     </layout>
@@ -266,8 +267,8 @@
                         <property name="justify">center</property>
                         <layout manager="place">
                           <property name="anchor">nw</property>
-                          <property name="relx">0.23</property>
-                          <property name="rely">0.05</property>
+                          <property name="relx">0.14</property>
+                          <property name="rely">0.04</property>
                           <property name="width">30</property>
                           <property name="x">0</property>
                           <property name="y">0</property>
@@ -279,8 +280,8 @@
                         <property name="justify">center</property>
                         <layout manager="place">
                           <property name="anchor">nw</property>
-                          <property name="relx">0.55</property>
-                          <property name="rely">0.05</property>
+                          <property name="relx">0.38</property>
+                          <property name="rely">0.04</property>
                           <property name="width">30</property>
                           <property name="x">0</property>
                           <property name="y">0</property>
@@ -292,8 +293,8 @@
                         <property name="justify">center</property>
                         <layout manager="place">
                           <property name="anchor">nw</property>
-                          <property name="relx">0.89</property>
-                          <property name="rely">0.05</property>
+                          <property name="relx">0.62</property>
+                          <property name="rely">0.04</property>
                           <property name="width">30</property>
                           <property name="x">0</property>
                           <property name="y">0</property>
@@ -302,11 +303,13 @@
                     </child>
                     <child>
                       <object class="ttk.Label" id="label_7">
-                        <property name="text" translatable="yes">Coluna Chamado</property>
+                        <property name="justify">center</property>
+                        <property name="text" translatable="yes">Coluna
+Chamado</property>
                         <layout manager="place">
                           <property name="anchor">nw</property>
                           <property name="relx">0.01</property>
-                          <property name="rely">0.05</property>
+                          <property name="rely">0.02</property>
                           <property name="x">0</property>
                           <property name="y">0</property>
                         </layout>
@@ -314,11 +317,13 @@
                     </child>
                     <child>
                       <object class="ttk.Label" id="label_8">
-                        <property name="text" translatable="yes">Coluna E-mail</property>
+                        <property name="justify">center</property>
+                        <property name="text" translatable="yes">Coluna
+E-mail</property>
                         <layout manager="place">
                           <property name="anchor">nw</property>
-                          <property name="relx">0.7</property>
-                          <property name="rely">0.05</property>
+                          <property name="relx">0.49</property>
+                          <property name="rely">0.02</property>
                           <property name="x">0</property>
                           <property name="y">0</property>
                         </layout>
@@ -326,11 +331,13 @@
                     </child>
                     <child>
                       <object class="ttk.Label" id="label_9">
-                        <property name="text" translatable="yes">Coluna Assunto</property>
+                        <property name="justify">center</property>
+                        <property name="text" translatable="yes">Coluna
+Assunto</property>
                         <layout manager="place">
                           <property name="anchor">nw</property>
-                          <property name="relx">0.35</property>
-                          <property name="rely">0.05</property>
+                          <property name="relx">0.25</property>
+                          <property name="rely">0.02</property>
                           <property name="x">0</property>
                           <property name="y">0</property>
                         </layout>
@@ -357,6 +364,46 @@
                             </layout>
                           </object>
                         </child>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Label" id="label_1_2">
+                        <property name="justify">center</property>
+                        <property name="text" translatable="yes">Coluna
+Descrição</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="relx">0.73</property>
+                          <property name="rely">0.02</property>
+                          <property name="x">0</property>
+                          <property name="y">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Entry" id="entry_1">
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="relx">0.86</property>
+                          <property name="rely">0.04</property>
+                          <property name="width">30</property>
+                          <property name="x">0</property>
+                          <property name="y">0</property>
+                        </layout>
+                      </object>
+                    </child>
+                    <child>
+                      <object class="ttk.Button" id="button_2">
+                        <property name="text" translatable="yes">...</property>
+                        <layout manager="place">
+                          <property name="anchor">nw</property>
+                          <property name="height">23</property>
+                          <property name="relx">0.94</property>
+                          <property name="rely">0.035</property>
+                          <property name="width">20</property>
+                          <property name="x">0</property>
+                          <property name="y">0</property>
+                        </layout>
                       </object>
                     </child>
                   </object>

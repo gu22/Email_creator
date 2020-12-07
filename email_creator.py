@@ -107,6 +107,8 @@ for i in range(nlinhas):
     
     email_destino = base.loc[i][19]
     
+    descricao = base.loc[i][21]
+    
     if str(nome_chamado) == 'nan':
         base.iat[i,ncolunas] = "Falta Assunto do chamado"
         recusa.append(" {};".format(numero_chamado))
@@ -147,8 +149,11 @@ for i in range(nlinhas):
 <p style="margin: 0cm; margin-bottom: .0001pt;">&nbsp;</p>
 <p style="margin: 0cm; margin-bottom: .0001pt;">Tudo bem?</p>
 <p style="margin: 0cm; margin-bottom: .0001pt;">&nbsp;</p>
-<p style="margin: 0cm; margin-bottom: .0001pt;">Recentemente voc&ecirc; entrou em contato com a Central de Intera&ccedil;&atilde;o referente ao chamado <strong>{} - {}</strong>.</p>
-<p style="margin: 0cm; margin-bottom: .0001pt;">&nbsp;</p>
+<p style="margin: 0cm; margin-bottom: .0001pt;">Recentemente voc&ecirc; entrou em contato com a Central de Intera&ccedil;&atilde;o referente ao chamado  <span style="background-color: #ffff00;"><strong>{} - {}</strong></span>, conforme solicitação abaixo:</p>
+
+<p><em>" {} "</em></p>
+
+
 <p style="margin: 0cm; margin-bottom: .0001pt;">Poderia, por gentileza, nos ajudar na melhoria dos nossos atendimentos respondendo essa pesquisa que leva menos de 2min?</p>
 <p style="margin: 0cm; margin-bottom: .0001pt;">&nbsp;</p>
 <p style="margin: 0cm; margin-bottom: .0001pt;">Link: <a href="{}">{}</a></p>
@@ -163,7 +168,7 @@ for i in range(nlinhas):
     
     
     
-    """.format(saudacao_email,numero_chamado,nome_chamado,linkp,linkp)
+    """.format(saudacao_email,numero_chamado,nome_chamado,descricao,linkp,linkp)
     # """.format(saudacao_email,numero_chamado,pesquisa)
 
 
@@ -265,11 +270,11 @@ emailv.Subject= assunto_verificacao
 emailv.HTMLBody= (texto_verificacao)   
 
 
-# emailv.SaveAs("{} - {}.msg".format(assunto_verificacao,data_rg),3)
+emailv.SaveAs("{} - {}.msg".format(assunto_verificacao,data_rg),3)
 
 
 #HINT
-# emailv.Display(False)
+emailv.Display(False)
 
 if not email_confirmacao == "":
     emailv.Send()   
@@ -279,11 +284,15 @@ base.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
 easygui.msgbox("Finalizado")
 # -----------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------
-
+#<p>Recentemente você entrou em contato com a Central de Interação referente ao chamado {} - {}, conforme solicitação abaixo:
+        
 """<p>{}!</p>
+    
+    
     <p>Estamos enviando este e-mail para avaliar como foi o tratamento do chamado encerrado.</p>
-    <p>&nbsp;Chamado: <span style="background-color: #ffff00; font-size: 28px;">{}</span> --&gt; utilizar esse numero no primeiro item da pesquisa</p>
+     <p>&nbsp;Chamado: <span style="background-color: #ffff00; font-size: 28px;">{}</span> --&gt; utilizar esse numero no primeiro item da pesquisa</p>
     <p>&Eacute; de extrema importancia que voce complete a pesquisa, para melhorar o processo.</p>
+    <p><span style="background-color: #0000ff;">HTML</span></p>
     <b><a title="Pesquisa" href="{}">Pesquisa</a><\b>
     <p>Atenciosamente,</p>
     <p>Equipe Customer.</p>
