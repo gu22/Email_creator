@@ -621,7 +621,7 @@ class Automail:
 
             corpo_email_formatado = corpo_email.format(numero_chamado,nome_chamado,email_destino)
             
-            corpo_emailhtml = corpo_email.replace('\n', '<br>')
+            corpo_emailhtml = corpo_email_formatado.replace('\n', '<br>')
             assinatura_emailhtml = assinatura_email.replace('\n', '<br>')
             outlook = win32com.client.Dispatch('Outlook.Application')
             email = outlook.CreateItem(0)
@@ -632,8 +632,8 @@ class Automail:
             
             
             
-            corpo_emailhtml = corpo_email.replace('\n', '<br>')
-            assinatura_emailhtml = assinatura_email.replace('\n', '<br>')
+            # corpo_emailhtml = corpo_email.replace('\n', '<br>')
+            # assinatura_emailhtml = assinatura_email.replace('\n', '<br>')
             
             outlook = win32com.client.Dispatch('Outlook.Application')
             email = outlook.CreateItem(0)
@@ -644,8 +644,8 @@ class Automail:
             email.To = email_destino
 
 
-            # email.HTMLBody= (corpo_emailhtml+"<p>"+assinatura_emailhtml+"<\p>")
-            email.HTMLBody= (corpo_email_formatado+"<p>"+assinatura_emailhtml+"<\p>")
+            email.HTMLBody= (corpo_emailhtml+"<p>"+assinatura_emailhtml+"<\p>")
+            # email.HTMLBody= (corpo_email_formatado+"<p>"+assinatura_emailhtml+"<\p>")
             if email_remetente == "":
                 pass
             else:
