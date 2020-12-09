@@ -68,6 +68,7 @@ coluna_email = padrao_planilha['colunaEmails']
 coluna_assunto = padrao_planilha['colunaAssuntos']
 
 coluna_responsavel_chm = padrao_planilha['colunaresponsavel']
+coluna_descricao = padrao_planilha['colunadescricao']
 
 
 corpo_fonte = ""
@@ -89,8 +90,10 @@ resp = []
 envio = []
 recusa = []
 
-
-
+try:
+corpo_email_formatado = corpo_email.format()
+except:
+    pass
 
 
 X = 0
@@ -386,6 +389,7 @@ class Automail:
             self.label_1_2.place(anchor='nw', relx='0.73', rely='0.02', x='0', y='0')
             self.n_descricao = ttk.Entry(self.frame_6)
             self.n_descricao.place(anchor='nw', relx='0.86', rely='0.04', width='30', x='0', y='0')
+            self.n_descricao.config(justify='center')
             self.botao_coluna = ttk.Button(self.frame_6)
             self.botao_coluna.config(text='...')
             self.botao_coluna.place(anchor='nw', height='23', relx='0.94', rely='0.035', width='20', x='0', y='0')
@@ -472,6 +476,7 @@ class Automail:
             self.n_chamado.insert(0,coluna_chamado )
             self.n_assunto.insert(0,coluna_assunto )
             self.n_email.insert(0, coluna_email)
+            self.n_descricao.insert(0, coluna_descricao)
 
             self.campo_assunto.insert(0,assunto_email)
             self.campo_de.insert(0,email_remetente)
@@ -574,7 +579,25 @@ class Automail:
             obs = 0
 
         def preview(self):
-            global corpo_email,assunto_email,email_remetente
+            
+            global corpo_email,assunto_email,email_remetente,coluna_chamado,coluna_assunto,coluna_email
+            global coluna_descricao
+            
+            coluna_chamado = self.n_chamado.get()
+            coluna_assunto = self.n_assunto.get()
+            coluna_email = self.n_email.get()
+            
+            assunto_email = self.campo_assunto.get()
+            email_remetente = self.campo_de.get()
+
+            corpo_email = self.text_msg.get("0.0",'end-1c')
+            assinatura_email = self.text_ass.get("0.0",'end-1c')
+            # descricao_email = self.text_ass.get("0.0",'end-1c')
+            
+            
+            
+            
+            
             corpo_emailhtml = corpo_email.replace('\n', '<br>')
             assinatura_emailhtml = assinatura_email.replace('\n', '<br>')
             outlook = win32com.client.Dispatch('Outlook.Application')
