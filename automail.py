@@ -239,7 +239,12 @@ class Automail:
 #!!! EMAIL
 
     def enviar(self):
-        global corpo_email,excel
+        global corpo_email,assunto_email,email_remetente,coluna_chamado,coluna_assunto,coluna_email
+        global coluna_descricao,excel,coluna_responsavel
+        
+          
+        
+        
         excel['Envio email'] = "nan"
         ncolunas = len(excel.columns)
         nlinhas = len(excel.index)
@@ -533,10 +538,10 @@ class Automail:
             global assunto_email,email_remetente,corpo_email,assinatura_email
 
 
-            coluna_chamado = self.n_chamado.get()
-            coluna_assunto = self.n_assunto.get()
-            coluna_email = self.n_email.get()
-            coluna_descricao = self.n_descricao.get()
+            coluna_chamado = int (self.n_chamado.get())-1
+            coluna_assunto = int (self.n_assunto.get())-1
+            coluna_email = int (self.n_email.get())-1
+            coluna_descricao = int (self.n_descricao.get())-1
             
             assunto_email = self.campo_assunto.get()
             email_remetente = self.campo_de.get()
@@ -565,9 +570,9 @@ class Automail:
         def ok_config(self):
             global obs,coluna_chamado,coluna_assunto,coluna_email
             global assunto_email,email_remetente,corpo_email,assinatura_email
-            coluna_chamado = self.n_chamado.get()
-            coluna_assunto = self.n_assunto.get()
-            coluna_email = self.n_email.get()
+            coluna_chamado = int (self.n_chamado.get())-1
+            coluna_assunto = int (self.n_assunto.get())-1
+            coluna_email = int (self.n_email.get())-1
             
             assunto_email = self.campo_assunto.get()
             email_remetente = self.campo_de.get()
@@ -584,9 +589,9 @@ class Automail:
             global corpo_email,assunto_email,email_remetente,coluna_chamado,coluna_assunto,coluna_email
             global coluna_descricao,excel,coluna_responsavel
             
-            coluna_chamado = self.n_chamado.get()
-            coluna_assunto = self.n_assunto.get()
-            coluna_email = self.n_email.get()
+            coluna_chamado = int (self.n_chamado.get())-1
+            coluna_assunto = int (self.n_assunto.get())-1
+            coluna_email = int (self.n_email.get())-1
             
             assunto_email = self.campo_assunto.get()
             email_remetente = self.campo_de.get()
@@ -599,21 +604,21 @@ class Automail:
             
             
             # Pegando valores da base dados
-            campo_chamado = excel.columns[int(coluna_chamado)-1]
+            campo_chamado = excel.columns[(coluna_chamado)]
             print(campo_chamado)
             
-            numero_chamado = int(excel.loc[1][int(coluna_chamado)-1])
+            numero_chamado = (excel.loc[1][(coluna_chamado)])
             print(numero_chamado)
             
             
-            nome_chamado = excel.loc[1][int(coluna_assunto)-1]
+            nome_chamado = excel.loc[1][(coluna_assunto)]
             print(nome_chamado)
         
             #cliente = excel.loc[i][13]
             
             # responsavel = excel.loc[1][int(coluna_responsavel)]
             
-            email_destino = excel.loc[1][int(coluna_email)-1]
+            email_destino = excel.loc[1][int(coluna_email)]
             print(email_destino)
             
             
