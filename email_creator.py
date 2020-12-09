@@ -160,7 +160,7 @@ for i in range(nlinhas):
 <p style="margin: 0cm; margin-bottom: .0001pt;">&nbsp;</p>
 <p style="margin: 0cm; margin-bottom: .0001pt;">Agradecemos a colabora&ccedil;&atilde;o!</p>
 <p>Atenciosamente,</p>
-<p>Central Intera&ccedil;&otilde;es.</p>
+<p>Central de Intera&ccedil;&atilde;o.</p>
     
         
     
