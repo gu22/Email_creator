@@ -90,10 +90,9 @@ resp = []
 envio = []
 recusa = []
 
-try:
-corpo_email_formatado = corpo_email.format()
-except:
-    pass
+
+
+
 
 
 X = 0
@@ -530,13 +529,14 @@ class Automail:
             print('Fechou')
 
         def save(self):
-            global obs,coluna_chamado,coluna_assunto,coluna_email
+            global obs,coluna_chamado,coluna_assunto,coluna_email,coluna_descricao
             global assunto_email,email_remetente,corpo_email,assinatura_email
 
 
             coluna_chamado = self.n_chamado.get()
             coluna_assunto = self.n_assunto.get()
             coluna_email = self.n_email.get()
+            coluna_descricao = self.n_descricao.get()
             
             assunto_email = self.campo_assunto.get()
             email_remetente = self.campo_de.get()
@@ -557,6 +557,7 @@ class Automail:
             padrao_planilha['colunaChamados'] = self.n_chamado.get()
             padrao_planilha['colunaEmails'] = self.n_email.get()
             padrao_planilha['colunaAssuntos'] = self.n_assunto.get()
+            padrao_planilha['colunaDescricao'] = self.n_descricao.get()
            #Salvando arquivo config
             with open ('Configuracao.ini','w') as stg:
                 default.write(stg)
@@ -581,7 +582,7 @@ class Automail:
         def preview(self):
             
             global corpo_email,assunto_email,email_remetente,coluna_chamado,coluna_assunto,coluna_email
-            global coluna_descricao
+            global coluna_descricao,excel,coluna_responsavel
             
             coluna_chamado = self.n_chamado.get()
             coluna_assunto = self.n_assunto.get()
@@ -593,6 +594,39 @@ class Automail:
             corpo_email = self.text_msg.get("0.0",'end-1c')
             assinatura_email = self.text_ass.get("0.0",'end-1c')
             # descricao_email = self.text_ass.get("0.0",'end-1c')
+            print("\n"+corpo_email)
+            
+            
+            
+            # Pegando valores da base dados
+            campo_chamado = excel.columns[int(coluna_chamado)-1]
+            print(campo_chamado)
+            
+            numero_chamado = int(excel.loc[1][int(coluna_chamado)-1])
+            print(numero_chamado)
+            
+            
+            nome_chamado = excel.loc[1][int(coluna_assunto)-1]
+            print(nome_chamado)
+        
+            #cliente = excel.loc[i][13]
+            
+            # responsavel = excel.loc[1][int(coluna_responsavel)]
+            
+            email_destino = excel.loc[1][int(coluna_email)-1]
+            print(email_destino)
+            
+            
+
+
+            corpo_email_formatado = corpo_email.format(numero_chamado,nome_chamado,email_destino)
+            
+            corpo_emailhtml = corpo_email.replace('\n', '<br>')
+            assinatura_emailhtml = assinatura_email.replace('\n', '<br>')
+            outlook = win32com.client.Dispatch('Outlook.Application')
+            email = outlook.CreateItem(0)
+            
+            
             
             
             
@@ -600,15 +634,18 @@ class Automail:
             
             corpo_emailhtml = corpo_email.replace('\n', '<br>')
             assinatura_emailhtml = assinatura_email.replace('\n', '<br>')
+            
             outlook = win32com.client.Dispatch('Outlook.Application')
             email = outlook.CreateItem(0)
     
     
             email.BodyFormat= 2
             email.Subject= assunto_email
+            email.To = email_destino
 
 
-            email.HTMLBody= (corpo_emailhtml+"<p>"+assinatura_emailhtml+"<\p>")
+            # email.HTMLBody= (corpo_emailhtml+"<p>"+assinatura_emailhtml+"<\p>")
+            email.HTMLBody= (corpo_email_formatado+"<p>"+assinatura_emailhtml+"<\p>")
             if email_remetente == "":
                 pass
             else:
