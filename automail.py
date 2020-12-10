@@ -63,12 +63,12 @@ assunto_email = padrao_email['assunto']
 corpo_email = padrao_email['corpo']
 assinatura_email = padrao_email['assinatura']
 
-coluna_chamado = padrao_planilha['colunaChamados']
-coluna_email = padrao_planilha['colunaEmails']
-coluna_assunto = padrao_planilha['colunaAssuntos']
+coluna_chamado = int (padrao_planilha['colunaChamados']) -1
+coluna_email = int (padrao_planilha['colunaEmails'])-1
+coluna_assunto = int (padrao_planilha['colunaAssuntos'])-1
 
-coluna_responsavel_chm = padrao_planilha['colunaresponsavel']
-coluna_descricao = padrao_planilha['colunadescricao']
+coluna_responsavel = int (padrao_planilha['colunaresponsavel'])-1
+coluna_descricao = int (padrao_planilha['colunadescricao'])-1
 
 
 corpo_fonte = ""
@@ -243,10 +243,11 @@ class Automail:
         global coluna_descricao,excel,coluna_responsavel
         
           
-        
+        recusa=[]
+        responsavel=[]
         
         excel['Envio email'] = "nan"
-        ncolunas = len(excel.columns)
+        ncolunas = len(excel.columns)-1
         nlinhas = len(excel.index)
 
 
@@ -255,20 +256,20 @@ class Automail:
             
             
             # Pegando valores da base dados
-            campo_chamado = excel.columns[int(coluna_chamado)]
+            campo_chamado = excel.columns[(coluna_chamado)]
             try:
-                numero_chamado = int(excel.loc[i][int(coluna_chamado)])
+                numero_chamado = int(excel.loc[i][(coluna_chamado)])
             except:
                 excel.iat[i,ncolunas] = "Falta n° chamado"
                 continue
             
-            nome_chamado = excel.loc[i][int(coluna_assunto)]
+            nome_chamado = excel.loc[i][(coluna_assunto)]
         
             #cliente = excel.loc[i][13]
             
-            responsavel = excel.loc[i][int(coluna_responsavel_chm)]
+            responsavel = excel.loc[i][(coluna_responsavel)]
             
-            email_destino = excel.loc[i][int(coluna_email)]
+            email_destino = excel.loc[i][(coluna_email)]
             
             if str(nome_chamado) == 'nan':
                 excel.iat[i,ncolunas] = "Falta Assunto do chamado"
@@ -281,6 +282,7 @@ class Automail:
                 continue
             else:
                 excel.iat[i,ncolunas] = "Em preparação"
+                pass
             
             # filtrando os reponsaveis pelos chamados
             if not resp:
