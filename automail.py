@@ -24,6 +24,7 @@ import openpyxl
 from openpyxl import load_workbook
 import pandas as pd
 
+import datetime
 
 
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
@@ -63,12 +64,12 @@ assunto_email = padrao_email['assunto']
 corpo_email = padrao_email['corpo']
 assinatura_email = padrao_email['assinatura']
 
-coluna_chamado = int (padrao_planilha['colunaChamados']) -1
-coluna_email = int (padrao_planilha['colunaEmails'])-1
-coluna_assunto = int (padrao_planilha['colunaAssuntos'])-1
+coluna_chamado = int (padrao_planilha['colunaChamados'])
+coluna_email = int (padrao_planilha['colunaEmails'])
+coluna_assunto = int (padrao_planilha['colunaAssuntos'])
 
-coluna_responsavel = int (padrao_planilha['colunaresponsavel'])-1
-coluna_descricao = int (padrao_planilha['colunadescricao'])-1
+coluna_responsavel = int (padrao_planilha['colunaresponsavel'])
+coluna_descricao = int (padrao_planilha['colunadescricao'])
 
 
 corpo_fonte = ""
@@ -271,6 +272,8 @@ class Automail:
             
             email_destino = excel.loc[i][(coluna_email)]
             
+            descricao = excel.loc[i][(coluna_descricao)]
+            
             if str(nome_chamado) == 'nan':
                 excel.iat[i,ncolunas] = "Falta Assunto do chamado"
                 recusa.append(" {};".format(numero_chamado))
@@ -289,6 +292,11 @@ class Automail:
                 resp.append(responsavel)
             elif responsavel not in resp:
                 resp.append(responsavel)
+                
+            corpo_emailhtml = corpo_email.replace('\n', '<br>')    
+            csaudacao=corpo_emailhtml.replace('C.SAUDACAO',saudacao_email)
+            cchamado = corpo_emailhtml.replace('C.CHAMADO',('<span style="background-color: #ffff00;"><strong>{} - {}</strong></span>').format(numero_chamado,nome_chamado))
+            cdescricao = corpo_emailhtml.replace('C.DESCRICAO',('<em>" {} "</em>').format(descricao))   
 
 
 
@@ -540,10 +548,10 @@ class Automail:
             global assunto_email,email_remetente,corpo_email,assinatura_email
 
 
-            coluna_chamado = int (self.n_chamado.get())-1
-            coluna_assunto = int (self.n_assunto.get())-1
-            coluna_email = int (self.n_email.get())-1
-            coluna_descricao = int (self.n_descricao.get())-1
+            coluna_chamado = int (self.n_chamado.get())
+            coluna_assunto = int (self.n_assunto.get())
+            coluna_email = int (self.n_email.get())
+            coluna_descricao = int (self.n_descricao.get())
             
             assunto_email = self.campo_assunto.get()
             email_remetente = self.campo_de.get()
@@ -591,9 +599,11 @@ class Automail:
             global corpo_email,assunto_email,email_remetente,coluna_chamado,coluna_assunto,coluna_email
             global coluna_descricao,excel,coluna_responsavel
             
-            coluna_chamado = int (self.n_chamado.get())-1
-            coluna_assunto = int (self.n_assunto.get())-1
-            coluna_email = int (self.n_email.get())-1
+            e_coluna_chamado = coluna_chamado - 1
+            e_coluna_assunto = coluna_assunto -1
+            e_coluna_email = coluna_email -1
+            e_coluna_descricao = coluna_descricao - 1
+            
             
             assunto_email = self.campo_assunto.get()
             email_remetente = self.campo_de.get()
@@ -606,36 +616,54 @@ class Automail:
             
             
             # Pegando valores da base dados
-            campo_chamado = excel.columns[(coluna_chamado)]
+            campo_chamado = excel.columns[(e_coluna_chamado)]
             print(campo_chamado)
             
-            numero_chamado = (excel.loc[1][(coluna_chamado)])
+            numero_chamado = (excel.loc[0][(e_coluna_chamado)])
             print(numero_chamado)
             
             
-            nome_chamado = excel.loc[1][(coluna_assunto)]
+            nome_chamado = excel.loc[0][(e_coluna_assunto)]
             print(nome_chamado)
         
             #cliente = excel.loc[i][13]
             
             # responsavel = excel.loc[1][int(coluna_responsavel)]
             
-            email_destino = excel.loc[1][int(coluna_email)]
+            email_destino = excel.loc[0][int(e_coluna_email)]
             print(email_destino)
             
+            descricao = excel.loc[0][(e_coluna_descricao)]
             
 
 
-            corpo_email_formatado = corpo_email.format(numero_chamado,nome_chamado,email_destino)
+            # corpo_email_formatado = corpo_email.format(numero_chamado,nome_chamado,email_destino)
             
-            corpo_emailhtml = corpo_email_formatado.replace('\n', '<br>')
-            assinatura_emailhtml = assinatura_email.replace('\n', '<br>')
-            outlook = win32com.client.Dispatch('Outlook.Application')
-            email = outlook.CreateItem(0)
+            # corpo_emailhtml = corpo_email_formatado.replace('\n', '<br>')
+            # assinatura_emailhtml = assinatura_email.replace('\n', '<br>')
+            # outlook = win32com.client.Dispatch('Outlook.Application')
+            # email = outlook.CreateItem(0)
             
+            data = datetime.datetime.now()
+            orientacao_dia = int(data.strftime("%H"))
+            saudacao=["Bom dia ","Boa Tarde ","Boa noite "]    
             
+            if orientacao_dia <=11:
+                saudacao_email = saudacao[0]
+            elif orientacao_dia <=17:
+                saudacao_email = saudacao[1]
+            else:
+                saudacao_email = saudacao[2]
+                    
             
-            
+            assinatura_emailhtml = assinatura_email
+            corpo_emailhtml = corpo_email.replace('\n', '<br>')    
+            # csaudacao=corpo_emailhtml.replace('C.SAUDACAO',saudacao_email)
+            # cchamado = corpo_emailhtml.replace('C.CHAMADO',('<span style="background-color: #ffff00;"><strong>{} - {}</strong></span>').format(numero_chamado,nome_chamado))
+            # cdescricao = corpo_emailhtml.replace('C.DESCRICAO',('<em>" {} "</em>').format(descricao))   
+            corpo_emailhtml= corpo_emailhtml.replace('C.SAUDACAO',saudacao_email)
+            corpo_emailhtml = corpo_emailhtml.replace('C.CHAMADO',('<span style="background-color: #ffff00;"><strong>{} - {}</strong></span>').format(numero_chamado,nome_chamado))
+            corpo_emailhtml = corpo_emailhtml.replace('C.DESCRICAO',('<em>" {} "</em>').format(descricao))   
             
             
             
