@@ -28,6 +28,8 @@ import datetime
 
 import os
 
+import pyperclip
+
 
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 #                                   ROTINAS
@@ -209,7 +211,8 @@ class Automail:
         
         self.button_enviar.config(command=self.enviar)
 
-
+        self.forms_colar.config(command=self.cole)
+        
         self.arquivo_ch.bind('<<PathChooserPathChanged>>', self.arquivo_excel)
 
 
@@ -243,7 +246,16 @@ class Automail:
             root_config.destroy()
 
 
-
+    def cole(self):
+        print("cmaou")
+        colar = pyperclip.paste()
+        colar_ex = colar.replace("\n"," ")
+        colar_ex = colar.split(" ")
+        
+        for i in colar_ex:
+            if 'www.' or "https" or "http" in i:
+                self.forms_link.insert(0,i)
+                print("colou")
 
 
 
