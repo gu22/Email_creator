@@ -130,3 +130,7 @@ Final.xlsx
 *.xlsx
 *.docm
 teste.ini
+Compilacao.json
+config/Configuracao.ini
+config/mail.ico
+config/LOG.txt

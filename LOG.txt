@@ -1,0 +1,89 @@
+2020-12-11 08:56:34,959 - Automail v150 - ERROR - Some error occurred
+Traceback (most recent call last):
+  File "C:\Users\Public\GLPYZ\1. PROGRAMAÇÃO\Email_creator\automail.py", line 900, in <module>
+    raise ValueError("Some error occurred")
+ValueError: Some error occurred
+2020-12-11 09:07:15,663 - Automail v150 - ERROR - local variable 'data_rg' referenced before assignment
+Traceback (most recent call last):
+  File "C:\Users\Public\GLPYZ\1. PROGRAMAÇÃO\Email_creator\automail.py", line 421, in enviar
+    excel.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
+UnboundLocalError: local variable 'data_rg' referenced before assignment
+2020-12-11 09:07:15,663 - Automail v150 - ERROR - local variable 'data_rg' referenced before assignment
+Traceback (most recent call last):
+  File "C:\Users\Public\GLPYZ\1. PROGRAMAÇÃO\Email_creator\automail.py", line 421, in enviar
+    excel.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
+UnboundLocalError: local variable 'data_rg' referenced before assignment
+2020-12-11 09:07:15,663 - Automail v150 - ERROR - local variable 'data_rg' referenced before assignment
+Traceback (most recent call last):
+  File "C:\Users\Public\GLPYZ\1. PROGRAMAÇÃO\Email_creator\automail.py", line 421, in enviar
+    excel.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
+UnboundLocalError: local variable 'data_rg' referenced before assignment
+2020-12-11 09:07:20,744 - Automail v150 - ERROR - local variable 'data_rg' referenced before assignment
+Traceback (most recent call last):
+  File "C:\Users\Public\GLPYZ\1. PROGRAMAÇÃO\Email_creator\automail.py", line 421, in enviar
+    excel.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
+UnboundLocalError: local variable 'data_rg' referenced before assignment
+2020-12-11 09:07:20,744 - Automail v150 - ERROR - local variable 'data_rg' referenced before assignment
+Traceback (most recent call last):
+  File "C:\Users\Public\GLPYZ\1. PROGRAMAÇÃO\Email_creator\automail.py", line 421, in enviar
+    excel.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
+UnboundLocalError: local variable 'data_rg' referenced before assignment
+2020-12-11 09:07:20,744 - Automail v150 - ERROR - local variable 'data_rg' referenced before assignment
+Traceback (most recent call last):
+  File "C:\Users\Public\GLPYZ\1. PROGRAMAÇÃO\Email_creator\automail.py", line 421, in enviar
+    excel.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
+UnboundLocalError: local variable 'data_rg' referenced before assignment
+2020-12-11 09:13:13,304 - Automail v150 - ERROR - local variable 'data_rg' referenced before assignment
+Traceback (most recent call last):
+  File "C:\Users\Public\GLPYZ\1. PROGRAMAÇÃO\Email_creator\automail.py", line 421, in enviar
+    excel.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
+UnboundLocalError: local variable 'data_rg' referenced before assignment
+2020-12-11 09:13:13,304 - Automail v150 - ERROR - local variable 'data_rg' referenced before assignment
+Traceback (most recent call last):
+  File "C:\Users\Public\GLPYZ\1. PROGRAMAÇÃO\Email_creator\automail.py", line 421, in enviar
+    excel.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
+UnboundLocalError: local variable 'data_rg' referenced before assignment
+2020-12-11 09:13:13,304 - Automail v150 - ERROR - local variable 'data_rg' referenced before assignment
+Traceback (most recent call last):
+  File "C:\Users\Public\GLPYZ\1. PROGRAMAÇÃO\Email_creator\automail.py", line 421, in enviar
+    excel.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
+UnboundLocalError: local variable 'data_rg' referenced before assignment
+2020-12-11 09:13:13,304 - Automail v150 - ERROR - local variable 'data_rg' referenced before assignment
+Traceback (most recent call last):
+  File "C:\Users\Public\GLPYZ\1. PROGRAMAÇÃO\Email_creator\automail.py", line 421, in enviar
+    excel.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
+UnboundLocalError: local variable 'data_rg' referenced before assignment
+2020-12-11 09:13:13,304 - Automail v150 - ERROR - local variable 'data_rg' referenced before assignment
+Traceback (most recent call last):
+  File "C:\Users\Public\GLPYZ\1. PROGRAMAÇÃO\Email_creator\automail.py", line 421, in enviar
+    excel.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
+UnboundLocalError: local variable 'data_rg' referenced before assignment
+
+=============
+2020-12-11 09:13:14,668 - Automail v150 - ERROR - local variable 'data_rg' referenced before assignment
+Traceback (most recent call last):
+  File "C:\Users\Public\GLPYZ\1. PROGRAMAÇÃO\Email_creator\automail.py", line 421, in enviar
+    excel.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
+UnboundLocalError: local variable 'data_rg' referenced before assignment
+2020-12-11 09:13:14,668 - Automail v150 - ERROR - local variable 'data_rg' referenced before assignment
+Traceback (most recent call last):
+  File "C:\Users\Public\GLPYZ\1. PROGRAMAÇÃO\Email_creator\automail.py", line 421, in enviar
+    excel.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
+UnboundLocalError: local variable 'data_rg' referenced before assignment
+2020-12-11 09:13:14,668 - Automail v150 - ERROR - local variable 'data_rg' referenced before assignment
+Traceback (most recent call last):
+  File "C:\Users\Public\GLPYZ\1. PROGRAMAÇÃO\Email_creator\automail.py", line 421, in enviar
+    excel.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
+UnboundLocalError: local variable 'data_rg' referenced before assignment
+2020-12-11 09:13:14,668 - Automail v150 - ERROR - local variable 'data_rg' referenced before assignment
+Traceback (most recent call last):
+  File "C:\Users\Public\GLPYZ\1. PROGRAMAÇÃO\Email_creator\automail.py", line 421, in enviar
+    excel.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
+UnboundLocalError: local variable 'data_rg' referenced before assignment
+2020-12-11 09:13:14,668 - Automail v150 - ERROR - local variable 'data_rg' referenced before assignment
+Traceback (most recent call last):
+  File "C:\Users\Public\GLPYZ\1. PROGRAMAÇÃO\Email_creator\automail.py", line 421, in enviar
+    excel.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
+UnboundLocalError: local variable 'data_rg' referenced before assignment
+
+=============

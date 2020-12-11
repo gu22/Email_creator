@@ -8,7 +8,9 @@ Created on Thu Nov 19 19:15:42 2020
 #                           IMPORTs
 #''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''''
 import tkinter as tk
+from tkinter import messagebox
 import tkinter.ttk as ttk
+
 
 import pygubu
 from pygubu.widgets.pathchooserinput import PathChooserInput
@@ -27,9 +29,11 @@ import pandas as pd
 import datetime
 
 import os
+import sys
 
 import pyperclip
 
+import logging
 
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 #                                   ROTINAS
@@ -37,15 +41,27 @@ import pyperclip
 Data = datetime.datetime.now()
 default = configparser.ConfigParser()
 
+icon = ('config/mail.ico')
 
-if os.path.exists('configuracao.ini'):
-     default.read('Configuracao.ini')
+logger = logging.getLogger('Automail v150')
+logger.setLevel(logging.INFO)
+
+fh = logging.FileHandler("config/LOG.txt")
+fh.setLevel(logging.INFO)
+
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+fh.setFormatter(formatter)
+
+logger.addHandler(fh)
+
+if os.path.exists('config/configuracao.ini'):
+     default.read('config/Configuracao.ini')
      print('passou')
 else:
     default['DEFAULT'] ={"link_forms":""}
     default['Planilha'] = {'colunaChamados':"0",'colunaAssuntos':"0",'colunaEmails':"0",'colunaResponsavel':"0",'colunaDescricao':"0"}
-    default['Email'] = {'controle':"",'remetente':"",'assunto':"",'corpo':"C.SAUDACAO;C.CHAMADO;C.DESCRICAO;C.LINK",'assinatura':""}
-    with open('Configuracao.ini','w') as wr:
+    default['Email'] = {'controle':"",'remetente':"",'assunto':"",'corpo':"C.SAUDACAO;C.CHAMADO;C.DESCRICAO;C.LINK",'assinatura':"",'report':""}
+    with open('config/Configuracao.ini','w') as wr:
         default.write(wr)
         
     default.read('Configuracao.ini')
@@ -83,6 +99,8 @@ coluna_assunto = int (padrao_planilha['colunaAssuntos'])
 coluna_responsavel = int (padrao_planilha['colunaresponsavel'])
 coluna_descricao = int (padrao_planilha['colunadescricao'])
 
+
+report_mail = padrao_email['report']
 
 corpo_fonte = ""
 corpo_tamanho =""
@@ -243,9 +261,11 @@ class Automail:
 #---------------------------------------------------------------------------------------------
 
     def sair(self):
-        root.destroy()
-        if obs ==1:
-            root_config.destroy()
+        fx = tk.messagebox.askyesno(title='Quer fechar?', message="Tem certeza que irá fechar?\n*Salve as alterações ou serão perdidas*")
+        if fx == True:
+            root.destroy()
+            if obs ==1:
+                root_config.destroy()
 
 
     def cole(self):
@@ -272,143 +292,158 @@ class Automail:
         global coluna_descricao,excel,coluna_responsavel
         global c
         
-        email_confirmacao = self.mail_control.get()
+        c=0
+        self.progressbar_1['value'] = 0
         
-        # self.output.delete('1.0',END)
-        
-        resp = []
-        envio = []
-        recusa=[]
-        responsavel=[]
-        
-        excel['Envio email'] = "nan"
-        ncolunas = len(excel.columns)-1
-        nlinhas = len(excel.index)
-        
-        
-        data = datetime.datetime.now()
-        orientacao_dia = int(data.strftime("%H"))
-        saudacao=["Bom dia ","Boa Tarde ","Boa noite "]    
-        
-        if orientacao_dia <=11:
-            saudacao_email = saudacao[0]
-        elif orientacao_dia <=17:
-            saudacao_email = saudacao[1]
-        else:
-            saudacao_email = saudacao[2]
-
-
-        ## TRATAMENTO DOS DADOS
-        for i in range(nlinhas):
+        try:
+            email_confirmacao = self.mail_control.get()
             
+            # self.output.delete('1.0',END)
             
-            # Pegando valores da base dados
-            campo_chamado = excel.columns[(e_coluna_chamado)]
-            try:
-                numero_chamado = int(excel.loc[i][(e_coluna_chamado)])
-            except:
-                excel.iat[i,ncolunas] = "Falta n° chamado"
-                continue
+            resp = []
+            envio = []
+            recusa=[]
+            # responsavel=[]
             
-            nome_chamado = excel.loc[i][(e_coluna_assunto)]
-        
-            #cliente = excel.loc[i][13]
+            excel['Envio email'] = "nan"
+            ncolunas = len(excel.columns)-1
+            nlinhas = len(excel.index)
             
+            bar = 90/nlinhas
             
+            data = datetime.datetime.now()
+            orientacao_dia = int(data.strftime("%H"))
+            saudacao=["Bom dia ","Boa Tarde ","Boa noite "]    
             
-            email_destino = excel.loc[i][(e_coluna_email)]
-            
-            descricao = excel.loc[i][(e_coluna_descricao)]
-            
-            if str(nome_chamado) == 'nan':
-                excel.iat[i,ncolunas] = "Falta Assunto do chamado"
-                recusa.append(" {};".format(numero_chamado))
-                continue
-            
-            if str(email_destino) == "nan":
-                excel.iat[i,ncolunas] = "Falta email"
-                recusa.append(" {};".format(numero_chamado))
-                continue
+            if orientacao_dia <=11:
+                saudacao_email = saudacao[0]
+            elif orientacao_dia <=17:
+                saudacao_email = saudacao[1]
             else:
-                excel.iat[i,ncolunas] = "Em preparação"
-                pass
-            
-            # filtrando os reponsaveis pelos chamados
-            try:
-                responsavel = excel.loc[i]['Proprietário do caso']
-                if not resp:
-                    resp.append(responsavel)
-                elif responsavel not in resp:
-                    resp.append(responsavel)
-            except:
-                pass
+                saudacao_email = saudacao[2]
+    
+    
+            ## TRATAMENTO DOS DADOS
+            for i in range(nlinhas):
                 
-            assinatura_emailhtml = assinatura_email
-            corpo_emailhtml = corpo_email.replace('\n', '<br>')    
-            corpo_emailhtml= corpo_emailhtml.replace('C.SAUDACAO',saudacao_email)
-            corpo_emailhtml = corpo_emailhtml.replace('C.CHAMADO',('<span style="background-color: #ffff00;"><strong>{} - {}</strong></span>').format(numero_chamado,nome_chamado))
-            corpo_emailhtml = corpo_emailhtml.replace('C.DESCRICAO',('<em>" {} "</em>').format(descricao))   
-            corpo_emailhtml = corpo_emailhtml.replace('C.LINK',('<a href="{}">{}</a>').format(link_forms,link_forms))   
-
-
+                
+                # Pegando valores da base dados
+                campo_chamado = excel.columns[(e_coluna_chamado)]
+                try:
+                    numero_chamado = int(excel.loc[i][(e_coluna_chamado)])
+                except:
+                    excel.iat[i,ncolunas] = "Falta n° chamado"
+                    continue
+                
+                nome_chamado = excel.loc[i][(e_coluna_assunto)]
             
-            assinatura_emailhtml = assinatura_email.replace('\n', '<br>')
-            outlook = win32com.client.Dispatch('Outlook.Application')
-            email = outlook.CreateItem(0)
+                #cliente = excel.loc[i][13]
+                
+                
+                
+                email_destino = excel.loc[i][(e_coluna_email)]
+                
+                descricao = excel.loc[i][(e_coluna_descricao)]
+                
+                if str(nome_chamado) == 'nan':
+                    excel.iat[i,ncolunas] = "Falta Assunto do chamado"
+                    recusa.append(" {};".format(numero_chamado))
+                    continue
+                
+                if str(email_destino) == "nan":
+                    excel.iat[i,ncolunas] = "Falta email"
+                    recusa.append(" {};".format(numero_chamado))
+                    continue
+                else:
+                    excel.iat[i,ncolunas] = "Em preparação"
+                    pass
+                
+                # filtrando os reponsaveis pelos chamados
+                # try:
+                #     responsavel = excel.loc[i]['Proprietário do caso']
+                #     if not resp:
+                #         resp.append(responsavel)
+                #     elif responsavel not in resp:
+                #         resp.append(responsavel)
+                # except:
+                #     pass
+                    
+                assinatura_emailhtml = assinatura_email
+                corpo_emailhtml = corpo_email.replace('\n', '<br>')    
+                corpo_emailhtml= corpo_emailhtml.replace('C.SAUDACAO',saudacao_email)
+                corpo_emailhtml = corpo_emailhtml.replace('C.CHAMADO',('<span style="background-color: #ffff00;"><strong>{} - {}</strong></span>').format(numero_chamado,nome_chamado))
+                corpo_emailhtml = corpo_emailhtml.replace('C.DESCRICAO',('<em>" {} "</em>').format(descricao))   
+                corpo_emailhtml = corpo_emailhtml.replace('C.LINK',('<a href="{}">{}</a>').format(link_forms,link_forms))   
     
     
-            email.BodyFormat= 2
-            email.Subject= assunto_email
-            email.To = email_destino
-
-            email.HTMLBody= (corpo_emailhtml+"<p>"+assinatura_emailhtml+"<\p>")
-            if email_remetente == "":
-                pass
-            else:
-                 email.SentOnBehalfOfName= email_remetente
+                
+                assinatura_emailhtml = assinatura_email.replace('\n', '<br>')
+                outlook = win32com.client.Dispatch('Outlook.Application')
+                email = outlook.CreateItem(0)
+        
+        
+                email.BodyFormat= 2
+                email.Subject= assunto_email
+                email.To = email_destino
     
-            email.Display(False)
+                email.HTMLBody= (corpo_emailhtml+"<p>"+assinatura_emailhtml+"<\p>")
+                if email_remetente == "":
+                    pass
+                else:
+                     email.SentOnBehalfOfName= email_remetente
+        
+                # email.Display(False)
+                
+                
+                print ("{}: {} {}\n".format(c,numero_chamado,email_destino)) 
+                self.output.insert("end","{}: {} {}\n".format(c,numero_chamado,email_destino)) 
+                print ("==============================================\n")
+                self.output.insert("end","=========================================\n")
+                envio.append("<br>{}: {} {}<\br>".format(c,numero_chamado,email_destino))
+                
+                excel.iat[i,ncolunas] = "OK"
+                c+=1
+                
+                data_rg = (str(Data.strftime("%Y.%m.%d_%H.%M.%S")))
+                # self.output.insert("0.0", corpo_email)
+                self.progressbar_1['value'] = bar
+                bar += bar
+                time.sleep(1)            
+                    
+            if email_confirmacao:
+                self.output.insert("end","Email de Confirmação enviado\n+++++++++++++\n")
+                nenvios = len(envio)    
+                insert = ("").join(envio)
+                insert_recusa = ("").join(recusa)
+                
+                
+                texto_verificacao = ("""
+        
+                <p>=================== Verifica&ccedil;&atilde;o dos Envios ================</p>
+                {}<p>Chamados não enviados: {}<\p>
+                <p>{}, Total de itens enviados: {}</p>
+                
+                """).format(insert,insert_recusa,data_rg,nenvios)
+                
+                assunto_verificacao = "Relatorio_email"
+                
+                emailv = outlook.CreateItem(0)
+                emailv.To= email_confirmacao
+                emailv.BodyFormat= 2
+                emailv.Subject= assunto_verificacao
+                emailv.HTMLBody= (texto_verificacao)   
+                
+                # emailv.Display(False)
+                
+            excel.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
+            self.output.insert("end","Planilha de verificação Criada\n")
+            self.output.insert("end","___PROCESSO CONCLUIDO____\n")
+            self.progressbar_1['value'] = 100
             
-            
-            print ("{}: {} {}\n".format(c,numero_chamado,email_destino)) 
-            self.output.insert("end","{}: {} {}\n".format(c,numero_chamado,email_destino)) 
-            print ("==============================================\n")
-            self.output.insert("end","=========================================\n")
-            envio.append("<br>{}: {} {}<\br>".format(c,numero_chamado,email_destino))
-            
-            excel.iat[i,ncolunas] = "OK"
-            c+=1
-            
-            data_rg = (str(Data.strftime("%Y.%m.%d_%H.%M.%S")))
-            # self.output.insert("0.0", corpo_email)
-        if email_confirmacao:
-            self.output.insert("end","Email de Confirmação enviado\n+++++++++++++\n")
-            nenvios = len(envio)    
-            insert = ("").join(envio)
-            insert_recusa = ("").join(recusa)
-            
-            
-            texto_verificacao = ("""
-    
-            <p>=================== Verifica&ccedil;&atilde;o dos Envios ================</p>
-            {}<p>Chamados não enviados: {}<\p>
-            <p>{}, Total de itens enviados: {}</p>
-            
-            """).format(insert,insert_recusa,data_rg,nenvios)
-            
-            assunto_verificacao = "Relatorio_email"
-            
-            emailv = outlook.CreateItem(0)
-            emailv.To= email_confirmacao
-            emailv.BodyFormat= 2
-            emailv.Subject= assunto_verificacao
-            emailv.HTMLBody= (texto_verificacao)   
-            
-            emailv.Display(False)
-            
-        excel.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
-        self.output.insert("end","Planilha de verificação Criada\n")
-        self.output.insert("end","___PROCESSO CONCLUIDO____")
+        except Exception as e:
+            logger.exception(e)
+            with open('LOG.txt','a') as add:
+                add.write('\n=============\n')
 
 ##############################################################################
 
@@ -424,26 +459,31 @@ class Automail:
     def arquivo_excel(self,event=None):
         global excel,colunas,X,excel_config,bz
         bz=0
-        excel = self.arquivo_ch.cget('path')
         try:
-            excel_config = pd.read_excel(excel)
-            excel = pd.read_excel(excel)
-            colunas = list(excel_config)
-            X = 1
-            print ('Arquivo carregado')
-            self.button_enviar.config(state='enabled')
-            self.output.insert("end","Arquivo carregado\n-----------------\n")
-        except:
-            self.arquivo_ch.configure(path="")
-            if bz == 0:
-                print ("Arquivo não pode ser carregado")
-                self.output.insert("end","Arquivo não pode ser carregado, extensão não suportada, extensão necessária: XLSX\n------------------------------\n")
-
-                X = 0
-            # self.arquivo_ch.configure(path="")
-                self.button_enviar.config(state='disabled')
-                bz=1
-
+            excel = self.arquivo_ch.cget('path')
+        
+            try:
+                excel_config = pd.read_excel(excel)
+                excel = pd.read_excel(excel)
+                colunas = list(excel_config)
+                X = 1
+                print ('Arquivo carregado')
+                self.button_enviar.config(state='enabled')
+                self.output.insert("end","Arquivo carregado\n-----------------\n")
+            except:
+                self.arquivo_ch.configure(path="")
+                if bz == 0:
+                    print ("Arquivo não pode ser carregado")
+                    self.output.insert("end","Arquivo não pode ser carregado, extensão não suportada, extensão necessária: XLSX\n------------------------------\n")
+    
+                    X = 0
+                # self.arquivo_ch.configure(path="")
+                    self.button_enviar.config(state='disabled')
+                    bz=1
+        except Exception as e:
+            logger.exception(e)
+            with open('LOG.txt','a') as add:
+                add.write('\n=============\n')
 
 
     def clean(self):
@@ -565,6 +605,8 @@ class Automail:
             self.button_config_ok.config(command=self.ok_config)
 
             self.button_preview.config(command=self.preview)
+            
+            self.botao_coluna.config(command=self.report)
             
             self.button_preview.bind("<ButtonPress-1>",self.catch)
             self.button_config_ok.bind("<ButtonPress-1>",self.catch)
@@ -691,7 +733,7 @@ class Automail:
             padrao_planilha['colunaDescricao'] = self.n_descricao.get()
             # padrao_planilha['colunaResponsavel']
            #Salvando arquivo config
-            with open ('Configuracao.ini','w') as stg:
+            with open ('config/Configuracao.ini','w') as stg:
                 default.write(stg)
 
         def ok_config(self):
@@ -810,7 +852,21 @@ class Automail:
     
     
             # self.output.insert("end", (corpo_email+"\n------------\n"))
+        def report(self):
+            global report_mail
+            outlook = win32com.client.Dispatch('Outlook.Application')
+            emailrep = outlook.CreateItem(0)
+    
+            emailrep.BodyFormat= 2
+            emailrep.Subject= 'Report - Error Automail'
+            emailrep.To = report_mail
 
+            file = sys.path[0]
+            file = os.path.join(file,"config/LOG.txt")
+            emailrep.HTMLBody= ('Report - erro no automail - LOG')
+            emailrep.Attachments.Add(Source = (file))
+            
+            emailrep.Send()
 
 
     def setting(self):
@@ -820,7 +876,7 @@ class Automail:
         if obs ==0:
             root_config = tk.Tk()
             root_config.title("Configurações")
-            root_config.iconbitmap('mail.ico')
+            root_config.iconbitmap(icon)
             
             
             w2=550
@@ -869,7 +925,7 @@ if __name__ == '__main__':
 
     root = tk.Tk()
     root.title("AutoMail v150")
-    root.iconbitmap('mail.ico')
+    root.iconbitmap(icon)
     
     w=700
     h=400
@@ -883,6 +939,15 @@ if __name__ == '__main__':
 
     app = Automail(root)
     # appconfig = AutomailConfig(root)
+    
+    
+    try:
+        pass
+    except Exception as e:
+        logger.exception(e) 
+    
+    
+    
     app.run()
 
 # ========================================================================================
