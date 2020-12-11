@@ -37,6 +37,13 @@ default = configparser.ConfigParser()
 try:
      default.read('Configuracao.ini')
 except:
+    default['DEFAULT'] ={"link_forms":""}
+    default['Email'] = {'controle':"",'remetente':"",'assunto':"",'corpo':"",'assinatura':""}
+    default['Planilha'] = {'colunaChamados':"",'colunaAssuntos':"",'colunaEmails':"",'colunaResponsavel':"",'colunaDescricao':""}
+    with open('Configuracao.ini','w') as wr:
+        default.write(wr)
+        
+    default.read('Configuracao.ini')
     pass
     
 
@@ -93,9 +100,7 @@ e_coluna_descricao = coluna_descricao - 1
 
 
 
-resp = []
-envio = []
-recusa = []
+
 
 
 
@@ -252,6 +257,10 @@ class Automail:
         
         email_confirmacao = self.mail_control.get()
         
+        # self.output.delete('1.0',END)
+        
+        resp = []
+        envio = []
         recusa=[]
         responsavel=[]
         
@@ -749,7 +758,7 @@ class Automail:
                 saudacao_email = saudacao[2]
                     
             
-            assinatura_emailhtml = assinatura_email
+            assinatura_emailhtml = assinatura_email.replace('\n', '<br>')
             corpo_emailhtml = corpo_email.replace('\n', '<br>')    
             # csaudacao=corpo_emailhtml.replace('C.SAUDACAO',saudacao_email)
             # cchamado = corpo_emailhtml.replace('C.CHAMADO',('<span style="background-color: #ffff00;"><strong>{} - {}</strong></span>').format(numero_chamado,nome_chamado))
