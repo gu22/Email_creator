@@ -545,7 +545,7 @@ class Automail:
             print('Fechou')
             
             
-        def catch(self):
+        def catch(self,event=None):
             global obs,coluna_chamado,coluna_assunto,coluna_email,coluna_descricao
             global assunto_email,email_remetente,corpo_email,assinatura_email
             
