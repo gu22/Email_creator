@@ -30,7 +30,7 @@ import datetime
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 #                                   ROTINAS
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
-
+Data = datetime.datetime.now()
 default = configparser.ConfigParser()
 
 
@@ -101,7 +101,7 @@ recusa = []
 
 
 
-
+c=0
 X = 0
 obs = 0
 # excel = pd.read_excel('teste.xlsx')
@@ -248,8 +248,10 @@ class Automail:
     def enviar(self):
         global corpo_email,assunto_email,email_remetente,coluna_chamado,coluna_assunto,coluna_email
         global coluna_descricao,excel,coluna_responsavel
+        global c
         
-          
+        email_confirmacao = self.mail_control.get()
+        
         recusa=[]
         responsavel=[]
         
@@ -275,22 +277,22 @@ class Automail:
             
             
             # Pegando valores da base dados
-            campo_chamado = excel.columns[(coluna_chamado)]
+            campo_chamado = excel.columns[(e_coluna_chamado)]
             try:
-                numero_chamado = int(excel.loc[i][(coluna_chamado)])
+                numero_chamado = int(excel.loc[i][(e_coluna_chamado)])
             except:
                 excel.iat[i,ncolunas] = "Falta n° chamado"
                 continue
             
-            nome_chamado = excel.loc[i][(coluna_assunto)]
+            nome_chamado = excel.loc[i][(e_coluna_assunto)]
         
             #cliente = excel.loc[i][13]
             
             
             
-            email_destino = excel.loc[i][(coluna_email)]
+            email_destino = excel.loc[i][(e_coluna_email)]
             
-            descricao = excel.loc[i][(coluna_descricao)]
+            descricao = excel.loc[i][(e_coluna_descricao)]
             
             if str(nome_chamado) == 'nan':
                 excel.iat[i,ncolunas] = "Falta Assunto do chamado"
@@ -340,10 +342,47 @@ class Automail:
                  email.SentOnBehalfOfName= email_remetente
     
             email.Display(False)
-    
-    
+            
+            
+            print ("{}: {} {}\n".format(c,numero_chamado,email_destino)) 
+            self.output.insert("end","{}: {} {}\n".format(c,numero_chamado,email_destino)) 
+            print ("==============================================\n")
+            self.output.insert("end","==============================================\n")
+            envio.append("<br>{}: {} {}<\br>".format(c,numero_chamado,email_destino))
+            
+            excel.iat[i,ncolunas] = "OK"
+            c+=1
+            
+            data_rg = (str(Data.strftime("%Y.%m.%d_%H.%M.%S")))
             # self.output.insert("0.0", corpo_email)
-
+        if email_confirmacao:
+            self.output.insert("end","Email de Confirmação enviado\n+++++++++++++\n")
+            nenvios = len(envio)    
+            insert = ("").join(envio)
+            insert_recusa = ("").join(recusa)
+            
+            
+            texto_verificacao = ("""
+    
+            <p>=================== Verifica&ccedil;&atilde;o dos Envios ================</p>
+            {}<p>Chamados não enviados: {}<\p>
+            <p>{}, Total de itens enviados: {}</p>
+            
+            """).format(insert,insert_recusa,data_rg,nenvios)
+            
+            assunto_verificacao = "Relatorio_email"
+            
+            emailv = outlook.CreateItem(0)
+            emailv.To= email_confirmacao
+            emailv.BodyFormat= 2
+            emailv.Subject= assunto_verificacao
+            emailv.HTMLBody= (texto_verificacao)   
+            
+            emailv.Display(False)
+            
+        excel.to_excel("Verificação - {}.xlsx".format(data_rg),index=False)
+        self.output.insert("end","Planilha de verificação Criada\n")
+        self.output.insert("end","___PROCESSO CONCLUIDO____")
 
 ##############################################################################
 
