@@ -184,7 +184,9 @@ class Automail:
         self.base_ds.config(height='400', relief='flat', width='600')
         self.base_ds.pack(anchor='center', expand='false', side='top')
         self.base_ds.pack_propagate(0)
-
+        
+        
+        
         # Main widget
         self.mainwindow = self.base_ds
         
@@ -817,6 +819,9 @@ class Automail:
 
         if obs ==0:
             root_config = tk.Tk()
+            root_config.title("Configurações")
+            root_config.iconbitmap('mail.ico')
+            
             
             w2=550
             h2=300
@@ -863,6 +868,8 @@ class Automail:
 if __name__ == '__main__':
 
     root = tk.Tk()
+    root.title("AutoMail v150")
+    root.iconbitmap('mail.ico')
     
     w=700
     h=400
