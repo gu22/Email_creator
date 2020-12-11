@@ -541,7 +541,7 @@ class Automail:
             self.button_preview.config(command=self.preview)
             
             self.button_preview.bind("<ButtonPress-1>",self.catch)
-            self.button_ok.bind("<ButtonPress-1>",self.catch)
+            self.button_config_ok.bind("<ButtonPress-1>",self.catch)
 
             # self.mainwindow.protocol("WM_DELETE_WINDOW",self.sair_config)
 
