@@ -325,7 +325,7 @@ class Automail:
             corpo_emailhtml = corpo_emailhtml.replace('C.LINK',('<a href="{}">{}</a>').format(link_forms,link_forms))   
 
 
-            corpo_emailhtml = corpo_email.replace('\n', '<br>')
+            
             assinatura_emailhtml = assinatura_email.replace('\n', '<br>')
             outlook = win32com.client.Dispatch('Outlook.Application')
             email = outlook.CreateItem(0)
@@ -347,7 +347,7 @@ class Automail:
             print ("{}: {} {}\n".format(c,numero_chamado,email_destino)) 
             self.output.insert("end","{}: {} {}\n".format(c,numero_chamado,email_destino)) 
             print ("==============================================\n")
-            self.output.insert("end","==============================================\n")
+            self.output.insert("end","=========================================\n")
             envio.append("<br>{}: {} {}<\br>".format(c,numero_chamado,email_destino))
             
             excel.iat[i,ncolunas] = "OK"
