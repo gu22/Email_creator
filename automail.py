@@ -86,6 +86,12 @@ excel = ""
 # config_excel =""
 
 
+e_coluna_chamado = coluna_chamado - 1
+e_coluna_assunto = coluna_assunto -1
+e_coluna_email = coluna_email -1
+e_coluna_descricao = coluna_descricao - 1
+
+
 
 resp = []
 envio = []
@@ -250,6 +256,18 @@ class Automail:
         excel['Envio email'] = "nan"
         ncolunas = len(excel.columns)-1
         nlinhas = len(excel.index)
+        
+        
+        data = datetime.datetime.now()
+        orientacao_dia = int(data.strftime("%H"))
+        saudacao=["Bom dia ","Boa Tarde ","Boa noite "]    
+        
+        if orientacao_dia <=11:
+            saudacao_email = saudacao[0]
+        elif orientacao_dia <=17:
+            saudacao_email = saudacao[1]
+        else:
+            saudacao_email = saudacao[2]
 
 
         ## TRATAMENTO DOS DADOS
@@ -293,11 +311,12 @@ class Automail:
             elif responsavel not in resp:
                 resp.append(responsavel)
                 
+            assinatura_emailhtml = assinatura_email
             corpo_emailhtml = corpo_email.replace('\n', '<br>')    
-            csaudacao=corpo_emailhtml.replace('C.SAUDACAO',saudacao_email)
-            cchamado = corpo_emailhtml.replace('C.CHAMADO',('<span style="background-color: #ffff00;"><strong>{} - {}</strong></span>').format(numero_chamado,nome_chamado))
-            cdescricao = corpo_emailhtml.replace('C.DESCRICAO',('<em>" {} "</em>').format(descricao))   
-
+            corpo_emailhtml= corpo_emailhtml.replace('C.SAUDACAO',saudacao_email)
+            corpo_emailhtml = corpo_emailhtml.replace('C.CHAMADO',('<span style="background-color: #ffff00;"><strong>{} - {}</strong></span>').format(numero_chamado,nome_chamado))
+            corpo_emailhtml = corpo_emailhtml.replace('C.DESCRICAO',('<em>" {} "</em>').format(descricao))   
+            corpo_emailhtml = corpo_emailhtml.replace('C.LINK',('<a href="{}">{}</a>').format(link_forms,link_forms))   
 
 
             corpo_emailhtml = corpo_email.replace('\n', '<br>')
@@ -479,6 +498,7 @@ class Automail:
             self.button_preview.config(command=self.preview)
             
             self.button_preview.bind("<ButtonPress-1>",self.catch)
+            self.button_ok.bind("<ButtonPress-1>",self.catch)
 
             # self.mainwindow.protocol("WM_DELETE_WINDOW",self.sair_config)
 
@@ -548,6 +568,7 @@ class Automail:
         def catch(self,event=None):
             global obs,coluna_chamado,coluna_assunto,coluna_email,coluna_descricao
             global assunto_email,email_remetente,corpo_email,assinatura_email
+            global e_coluna_chamado,e_coluna_assunto,e_coluna_email,e_coluna_descricao
             
             coluna_chamado = int (self.n_chamado.get())
             coluna_assunto = int (self.n_assunto.get())
@@ -560,24 +581,30 @@ class Automail:
             corpo_email = self.text_msg.get("0.0",'end-1c')
             assinatura_email = self.text_ass.get("0.0",'end-1c')
             
+            e_coluna_chamado = coluna_chamado - 1
+            e_coluna_assunto = coluna_assunto -1
+            e_coluna_email = coluna_email -1
+            e_coluna_descricao = coluna_descricao - 1
+            
             print("|Catch ON")
-            aa="ok"
+            
 
         def save(self):
             global obs,coluna_chamado,coluna_assunto,coluna_email,coluna_descricao
             global assunto_email,email_remetente,corpo_email,assinatura_email
 
 
-            coluna_chamado = int (self.n_chamado.get())
-            coluna_assunto = int (self.n_assunto.get())
-            coluna_email = int (self.n_email.get())
-            coluna_descricao = int (self.n_descricao.get())
+            # coluna_chamado = int (self.n_chamado.get())
+            # coluna_assunto = int (self.n_assunto.get())
+            # coluna_email = int (self.n_email.get())
+            # coluna_descricao = int (self.n_descricao.get())
+            # # coluna_responsavel
             
-            assunto_email = self.campo_assunto.get()
-            email_remetente = self.campo_de.get()
+            # assunto_email = self.campo_assunto.get()
+            # email_remetente = self.campo_de.get()
 
-            corpo_email = self.text_msg.get("0.0",'end-1c')
-            assinatura_email = self.text_ass.get("0.0",'end-1c')
+            # corpo_email = self.text_msg.get("0.0",'end-1c')
+            # assinatura_email = self.text_ass.get("0.0",'end-1c')
 
 
             # Janela Principal
@@ -593,6 +620,7 @@ class Automail:
             padrao_planilha['colunaEmails'] = self.n_email.get()
             padrao_planilha['colunaAssuntos'] = self.n_assunto.get()
             padrao_planilha['colunaDescricao'] = self.n_descricao.get()
+            # padrao_planilha['colunaResponsavel']
            #Salvando arquivo config
             with open ('Configuracao.ini','w') as stg:
                 default.write(stg)
@@ -617,7 +645,7 @@ class Automail:
         def preview(self):
             
             global corpo_email,assunto_email,email_remetente,coluna_chamado,coluna_assunto,coluna_email
-            global coluna_descricao,excel,coluna_responsavel
+            global coluna_descricao,excel,coluna_responsavel,link_forms
             
             
             
@@ -686,6 +714,7 @@ class Automail:
             corpo_emailhtml= corpo_emailhtml.replace('C.SAUDACAO',saudacao_email)
             corpo_emailhtml = corpo_emailhtml.replace('C.CHAMADO',('<span style="background-color: #ffff00;"><strong>{} - {}</strong></span>').format(numero_chamado,nome_chamado))
             corpo_emailhtml = corpo_emailhtml.replace('C.DESCRICAO',('<em>" {} "</em>').format(descricao))   
+            corpo_emailhtml = corpo_emailhtml.replace('C.LINK',('<a href="{}">{}</a>').format(link_forms,link_forms))   
             
             
             
