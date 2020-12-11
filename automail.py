@@ -26,6 +26,8 @@ import pandas as pd
 
 import datetime
 
+import os
+
 
 #[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[[]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]]
 #                                   ROTINAS
@@ -34,12 +36,13 @@ Data = datetime.datetime.now()
 default = configparser.ConfigParser()
 
 
-try:
+if os.path.exists('configuracao.ini'):
      default.read('Configuracao.ini')
-except:
+     print('passou')
+else:
     default['DEFAULT'] ={"link_forms":""}
-    default['Email'] = {'controle':"",'remetente':"",'assunto':"",'corpo':"",'assinatura':""}
-    default['Planilha'] = {'colunaChamados':"",'colunaAssuntos':"",'colunaEmails':"",'colunaResponsavel':"",'colunaDescricao':""}
+    default['Planilha'] = {'colunaChamados':"0",'colunaAssuntos':"0",'colunaEmails':"0",'colunaResponsavel':"0",'colunaDescricao':"0"}
+    default['Email'] = {'controle':"",'remetente':"",'assunto':"",'corpo':"C.SAUDACAO;C.CHAMADO;C.DESCRICAO;C.LINK",'assinatura':""}
     with open('Configuracao.ini','w') as wr:
         default.write(wr)
         
