@@ -478,6 +478,7 @@ class Automail:
 
             self.button_preview.config(command=self.preview)
             
+            self.button_preview.bind("<ButtonPress-1>",self.catch)
 
             # self.mainwindow.protocol("WM_DELETE_WINDOW",self.sair_config)
 
@@ -542,6 +543,25 @@ class Automail:
             global obs
             obs = 0
             print('Fechou')
+            
+            
+        def catch(self):
+            global obs,coluna_chamado,coluna_assunto,coluna_email,coluna_descricao
+            global assunto_email,email_remetente,corpo_email,assinatura_email
+            
+            coluna_chamado = int (self.n_chamado.get())
+            coluna_assunto = int (self.n_assunto.get())
+            coluna_email = int (self.n_email.get())
+            coluna_descricao = int (self.n_descricao.get())
+            
+            assunto_email = self.campo_assunto.get()
+            email_remetente = self.campo_de.get()
+
+            corpo_email = self.text_msg.get("0.0",'end-1c')
+            assinatura_email = self.text_ass.get("0.0",'end-1c')
+            
+            print("|Catch ON")
+            aa="ok"
 
         def save(self):
             global obs,coluna_chamado,coluna_assunto,coluna_email,coluna_descricao
@@ -580,9 +600,9 @@ class Automail:
         def ok_config(self):
             global obs,coluna_chamado,coluna_assunto,coluna_email
             global assunto_email,email_remetente,corpo_email,assinatura_email
-            coluna_chamado = int (self.n_chamado.get())-1
-            coluna_assunto = int (self.n_assunto.get())-1
-            coluna_email = int (self.n_email.get())-1
+            coluna_chamado = int (self.n_chamado.get())
+            coluna_assunto = int (self.n_assunto.get())
+            coluna_email = int (self.n_email.get())
             
             assunto_email = self.campo_assunto.get()
             email_remetente = self.campo_de.get()
@@ -598,6 +618,8 @@ class Automail:
             
             global corpo_email,assunto_email,email_remetente,coluna_chamado,coluna_assunto,coluna_email
             global coluna_descricao,excel,coluna_responsavel
+            
+            
             
             e_coluna_chamado = coluna_chamado - 1
             e_coluna_assunto = coluna_assunto -1
@@ -630,7 +652,7 @@ class Automail:
             
             # responsavel = excel.loc[1][int(coluna_responsavel)]
             
-            email_destino = excel.loc[0][int(e_coluna_email)]
+            email_destino = excel.loc[0][(e_coluna_email)]
             print(email_destino)
             
             descricao = excel.loc[0][(e_coluna_descricao)]
