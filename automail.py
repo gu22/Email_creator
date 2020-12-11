@@ -286,7 +286,7 @@ class Automail:
         
             #cliente = excel.loc[i][13]
             
-            responsavel = excel.loc[i][(coluna_responsavel)]
+            
             
             email_destino = excel.loc[i][(coluna_email)]
             
@@ -306,10 +306,14 @@ class Automail:
                 pass
             
             # filtrando os reponsaveis pelos chamados
-            if not resp:
-                resp.append(responsavel)
-            elif responsavel not in resp:
-                resp.append(responsavel)
+            try:
+                responsavel = excel.loc[i]['Proprietário do caso']
+                if not resp:
+                    resp.append(responsavel)
+                elif responsavel not in resp:
+                    resp.append(responsavel)
+            except:
+                pass
                 
             assinatura_emailhtml = assinatura_email
             corpo_emailhtml = corpo_email.replace('\n', '<br>')    
