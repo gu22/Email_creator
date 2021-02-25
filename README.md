@@ -1,2 +1,2 @@
 # Email_creator
- Criar e disparar emal
+ Criar e disparar e-mails automaticamente
